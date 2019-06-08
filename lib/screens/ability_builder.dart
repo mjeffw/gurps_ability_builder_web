@@ -62,43 +62,44 @@ class _AbilityPanelState extends State<AbilityPanel> {
               ),
             ),
             Container(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.bottomLeft,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: _costLabelText,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Checkbox(
+                    onChanged: (bool value) {
+                      setState(() {
+                        _hasLevels = !_hasLevels;
+                      });
+                    },
+                    value: _hasLevels,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: const Text('Has Levels'),
+                  ),
+                  Expanded(
+                    child: Visibility(
+                      visible: _hasLevels,
                       child: TextField(
-                        decoration: InputDecoration(
-                          labelText: _costLabelText,
+                        decoration: const InputDecoration(
+                          labelText: 'Level',
                           filled: true,
                         ),
                       ),
                     ),
-                    Checkbox(
-                      onChanged: (bool value) {
-                        setState(() {
-                          _hasLevels = !_hasLevels;
-                        });
-                      },
-                      value: _hasLevels,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text('Has Levels'),
-                    ),
-                    Expanded(
-                      child: Visibility(
-                        visible: _hasLevels,
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Level',
-                            filled: true,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ))
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
