@@ -1,8 +1,7 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/widgets/common.dart';
 
 class TraitNameField extends StatelessWidget {
-  final OnChanged<String> onChanged;
+  final ValueChanged<String> onChanged;
   final String value;
 
   const TraitNameField({Key key, this.onChanged, this.value}) : super(key: key);

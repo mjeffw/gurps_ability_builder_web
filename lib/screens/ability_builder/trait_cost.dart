@@ -6,7 +6,7 @@ class TraitCost extends StatelessWidget {
   final bool hasLevels;
   final bool isWideScreen;
   get _costLabelText => hasLevels ? 'Cost Per Level' : 'Cost';
-  final OnChanged<bool> onChanged;
+  final ValueChanged<bool> onChanged;
 
   const TraitCost(
       {Key key,
@@ -21,9 +21,7 @@ class TraitCost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(
-          child: getStandardTextField(_costLabelText),
-        ),
+        Expanded(child: getStandardTextField(_costLabelText)),
         PlatformCheckbox(onChanged: onChanged, hasLevels: hasLevels),
         Expanded(
           child: Visibility(

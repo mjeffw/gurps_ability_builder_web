@@ -1,6 +1,5 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_field.dart';
-import 'package:gurps_ability_builder_web/widgets/common.dart';
 
 import 'trait_cost.dart';
 
@@ -128,10 +127,10 @@ class TraitCard extends StatelessWidget {
   final String name;
   final int cost;
   final int costPerLevel;
-  final OnChanged<String> onNameChanged;
-  final OnChanged<int> onCostChanged;
-  final OnChanged<int> onCostPerLevelChanged;
-  final OnChanged<bool> onHasLevelsChanged;
+  final ValueChanged<String> onNameChanged;
+  final ValueChanged<int> onCostChanged;
+  final ValueChanged<int> onCostPerLevelChanged;
+  final ValueChanged<bool> onHasLevelsChanged;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter_web/io.dart';
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/widgets/common.dart';
 
 class PlatformCheckbox extends StatelessWidget {
   const PlatformCheckbox({
@@ -9,7 +8,7 @@ class PlatformCheckbox extends StatelessWidget {
     @required this.hasLevels,
   }) : super(key: key);
 
-  final OnChanged<bool> onChanged;
+  final ValueChanged<bool> onChanged;
   final bool hasLevels;
 
   @override
