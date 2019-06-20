@@ -1,7 +1,7 @@
 import 'package:flutter_web/material.dart';
+import 'package:gurps_ability_builder_web/screens/ability_builder/trait_cost.dart';
 import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_field.dart';
 
-import 'trait_cost.dart';
 
 const _widescreenWidthMinimum = 600.0;
 
