@@ -1,5 +1,5 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/screens/ability_builder.dart';
+import 'package:gurps_ability_builder_web/screens/ability_builder/ability_builder.dart';
 
 void main() => runApp(MyApp());
 
