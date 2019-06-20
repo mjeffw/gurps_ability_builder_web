@@ -12,7 +12,9 @@ class TraitCost extends StatelessWidget {
       {Key key,
       @required this.onChanged,
       @required this.hasLevels,
-      @required this.isWideScreen})
+      @required this.isWideScreen,
+      int costPerLevel,
+      int cost})
       : super(key: key);
 
   @override

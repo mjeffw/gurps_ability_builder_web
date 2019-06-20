@@ -1,5 +1,6 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_field.dart';
+import 'package:gurps_ability_builder_web/widgets/common.dart';
 
 import 'trait_cost.dart';
 
@@ -31,7 +32,9 @@ class _AbilityPanelState extends State<AbilityPanel> {
   double _width;
   bool _hasLevels = false;
   bool _isWideScreen = false;
-  String _name;
+  int _cost = 5;
+  int _costPerLevel = 0;
+  String _name = 'test';
 
   // Create a global key that will uniquely identify the Form widget and allow
   // us to validate the form
@@ -47,41 +50,115 @@ class _AbilityPanelState extends State<AbilityPanel> {
       _isWideScreen = _width > _widescreenWidthMinimum;
     });
 
-    var children2 = <Widget>[
-      Text('${_width.toString()}:$_isWideScreen'),
-      _buildContainer(TraitNameField(onChanged: (value) {
-        setState(() {
-          _name = value;
-        });
-      })),
-      _buildContainer(
-        TraitCost(
-          isWideScreen: false,
-          hasLevels: _hasLevels,
-          onChanged: (bool value) {
-            setState(() {
-              _hasLevels = value;
-            });
-          },
-        ),
-      )
-    ];
-
     return Form(
       child: Scrollbar(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: children2,
+          children: <Widget>[
+            Text('${_width.toString()}:$_isWideScreen'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TraitCard(
+                hasLevels: _hasLevels,
+                cost: _cost,
+                costPerLevel: _costPerLevel,
+                name: _name,
+                onCostChanged: (cost) {
+                  setState(() {
+                    this._cost = cost;
+                  });
+                },
+                onNameChanged: (name) {
+                  setState(() {
+                    this._name = name;
+                  });
+                },
+                onCostPerLevelChanged: (costPerLevel) {
+                  setState(() {
+                    _costPerLevel = costPerLevel;
+                  });
+                },
+                onHasLevelsChanged: (hasLevels) {
+                  setState(() {
+                    _hasLevels = hasLevels;
+                  });
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                  onPressed: () {},
+                  label: Text('Add Modifier'),
+                  icon: Icon(Icons.add),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  Container _buildContainer(Widget widget) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      alignment: Alignment.bottomLeft,
-      child: widget,
+Container _buildContainer(Widget widget) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    alignment: Alignment.bottomLeft,
+    child: widget,
+  );
+}
+
+class TraitCard extends StatelessWidget {
+  const TraitCard({
+    Key key,
+    @required this.hasLevels,
+    @required this.cost,
+    @required this.costPerLevel,
+    @required this.name,
+    @required this.onNameChanged,
+    @required this.onCostChanged,
+    @required this.onHasLevelsChanged,
+    @required this.onCostPerLevelChanged,
+  }) : super(key: key);
+
+  final bool hasLevels;
+  final String name;
+  final int cost;
+  final int costPerLevel;
+  final OnChanged<String> onNameChanged;
+  final OnChanged<int> onCostChanged;
+  final OnChanged<int> onCostPerLevelChanged;
+  final OnChanged<bool> onHasLevelsChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Trait',
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            ),
+            _buildContainer(
+                TraitNameField(value: name, onChanged: onNameChanged)),
+            _buildContainer(
+              TraitCost(
+                cost: cost,
+                costPerLevel: costPerLevel,
+                isWideScreen: false,
+                hasLevels: hasLevels,
+                onChanged: onHasLevelsChanged,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
