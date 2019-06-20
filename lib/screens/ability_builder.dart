@@ -1,4 +1,8 @@
+import 'package:flutter_web/io.dart';
 import 'package:flutter_web/material.dart';
+
+typedef void OnChanged<T>(T value);
+const _widescreenWidthMinimum = 600.0;
 
 class AbilityBuilder extends StatelessWidget {
   static String routeName = '/abilityBuilder';
@@ -24,10 +28,10 @@ class AbilityPanel extends StatefulWidget {
 }
 
 class _AbilityPanelState extends State<AbilityPanel> {
-  String _value;
+  double _width;
   bool _hasLevels = false;
-
-  get _costLabelText => _hasLevels ? 'Cost Per Level' : 'Cost';
+  bool _isWideScreen = false;
+  String _name;
 
   // Create a global key that will uniquely identify the Form widget and allow
   // us to validate the form
@@ -37,96 +41,128 @@ class _AbilityPanelState extends State<AbilityPanel> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    setState(() {
+      _width = width;
+      _isWideScreen = _width > _widescreenWidthMinimum;
+    });
+
+    var children2 = <Widget>[
+      Text('${_width.toString()}:$_isWideScreen'),
+      _buildContainer(_TraitNameField(onChanged: (value) {
+        setState(() {
+          _name = value;
+        });
+      })),
+      _buildContainer(
+        _TraitCost(
+          isWideScreen: false,
+          hasLevels: _hasLevels,
+          onChanged: (bool value) {
+            setState(() {
+              _hasLevels = value;
+            });
+          },
+        ),
+      )
+    ];
+
     return Form(
       child: Scrollbar(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Trait name',
-                  filled: true,
-                ),
-                onChanged: (value) {
-                  setState(
-                    () {
-                      if (value.isNotEmpty) {
-                        _value = value;
-                      }
-                    },
-                  );
-                },
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: _costLabelText,
-                        filled: true,
-                      ),
-                    ),
-                  ),
-                  Checkbox(
-                    onChanged: (bool value) {
-                      setState(() {
-                        _hasLevels = !_hasLevels;
-                      });
-                    },
-                    value: _hasLevels,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: const Text('Has Levels'),
-                  ),
-                  Expanded(
-                    child: Visibility(
-                      visible: _hasLevels,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Level',
-                          filled: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+          children: children2,
         ),
       ),
     );
+  }
 
-    // return Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: <Widget>[
-    //     TextField(
-    //         decoration: InputDecoration(
-    //           filled: true,
-    //           labelText:
-    //               'Trait (An advantage, disadvantage, attribute, secondary characteristic, quirk, skill, or technique)',
-    //         ),
-    //         onChanged: (text) {
-    //           _value = text;
-    //         }),
-    //     Text('Has Levels'),
-    //     Checkbox(
-    //       onChanged: (bool value) {
-    //         setState(() {
-    //           _hasLevels = !_hasLevels;
-    //         });
-    //       },
-    //       value: _hasLevels,
-    //     )
-    //   ],
-    // );
+  Container _buildContainer(Widget widget) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      alignment: Alignment.bottomLeft,
+      child: widget,
+    );
+  }
+}
+
+class _TraitCost extends StatelessWidget {
+  final bool hasLevels;
+  final bool isWideScreen;
+  get _costLabelText => hasLevels ? 'Cost Per Level' : 'Cost';
+  final OnChanged<bool> onChanged;
+
+  const _TraitCost(
+      {Key key,
+      @required this.onChanged,
+      @required this.hasLevels,
+      @required this.isWideScreen})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: _getStandardTextField(_costLabelText),
+        ),
+        PlatformCheckbox(onChanged: onChanged, hasLevels: hasLevels),
+        Expanded(
+          child: Visibility(
+            visible: hasLevels,
+            child: _getStandardTextField('Level'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+TextField _getStandardTextField(String text) {
+  return TextField(decoration: InputDecoration(labelText: text, filled: true));
+}
+
+class PlatformCheckbox extends StatelessWidget {
+  const PlatformCheckbox({
+    Key key,
+    @required this.onChanged,
+    @required this.hasLevels,
+  }) : super(key: key);
+
+  final OnChanged<bool> onChanged;
+  final bool hasLevels;
+
+  @override
+  Widget build(BuildContext context) {
+    var checkbox = (Platform.isIOS || Platform.isMacOS)
+        ? Switch(onChanged: onChanged, value: hasLevels)
+        : Checkbox(onChanged: onChanged, value: hasLevels);
+
+    return Row(
+      children: <Widget>[
+        checkbox,
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: const Text('Has Levels'),
+        ),
+      ],
+    );
+  }
+}
+
+class _TraitNameField extends StatelessWidget {
+  final OnChanged onChanged;
+
+  const _TraitNameField({Key key, this.onChanged}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: const InputDecoration(
+        labelText: 'Trait name',
+        filled: true,
+      ),
+      onChanged: onChanged,
+    );
   }
 }
