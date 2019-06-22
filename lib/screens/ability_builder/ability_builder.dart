@@ -1,10 +1,8 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
-import 'package:gurps_ability_builder_web/screens/ability_builder/modifier_card.dart';
-import 'package:gurps_ability_builder_web/screens/ability_builder/trait_cost.dart';
-import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_field.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
+import 'modifier_card.dart';
 import 'trait_card.dart';
 
 const _widescreenWidthMinimum = 600.0;

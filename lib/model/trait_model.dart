@@ -31,10 +31,10 @@ class TraitModel extends Trait {
         hasLevels: model.hasLevels,
         name: model.name,
         numberOfLevels: model.numberOfLevels,
-        modifiers: addModifierTo(model.modifiers, Modifier(name: 'Foo')));
+        modifiers: _addModifierTo(model.modifiers, Modifier(name: 'Foo')));
   }
 
-  static List<Modifier> addModifierTo(List<Modifier> list, Modifier mod) {
+  static List<Modifier> _addModifierTo(List<Modifier> list, Modifier mod) {
     var mods = List<Modifier>.from(list, growable: true);
     mods.add(mod);
     return mods;
