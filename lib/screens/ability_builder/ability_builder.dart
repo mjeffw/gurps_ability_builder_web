@@ -1,7 +1,9 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
+import 'package:gurps_ability_builder_web/screens/ability_builder/modifier_card.dart';
 import 'package:gurps_ability_builder_web/screens/ability_builder/trait_cost.dart';
 import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_field.dart';
+import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 const _widescreenWidthMinimum = 600.0;
 
@@ -42,6 +44,8 @@ class _AbilityPanelState extends State<AbilityPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final TraitModel model = TraitModel.of(context);
+
     double width = MediaQuery.of(context).size.width;
     setState(() {
       _width = width;
@@ -49,6 +53,7 @@ class _AbilityPanelState extends State<AbilityPanel> {
     });
 
     return Form(
+      key: _formKey,
       child: Scrollbar(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -58,12 +63,19 @@ class _AbilityPanelState extends State<AbilityPanel> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: TraitCard(),
             ),
+            for (var modifier in model.modifiers)
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ModifierCard(modifier)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 FloatingActionButton.extended(
-                  onPressed: () {},
+                  onPressed: () {
+                    TraitModel.update(context,
+                        TraitModel.addModifier(model, Modifier(name: 'Foo')));
+                  },
                   label: Text('Add Modifier'),
                   icon: Icon(Icons.add),
                 ),

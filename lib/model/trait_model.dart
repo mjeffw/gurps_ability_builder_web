@@ -1,15 +1,20 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_modifiers/gurps_enhancers.dart' as gurps;
+import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 @immutable
-class TraitModel extends gurps.Trait {
+class TraitModel extends Trait {
   const TraitModel(
-      {String name, int baseCost, bool hasLevels, int numberOfLevels})
+      {String name,
+      int baseCost,
+      bool hasLevels,
+      int numberOfLevels,
+      List<Modifier> modifiers})
       : super(
             name: name ?? '',
             baseCost: baseCost ?? 0,
             hasLevels: hasLevels ?? false,
-            numberOfLevels: numberOfLevels ?? 0);
+            numberOfLevels: numberOfLevels ?? 0,
+            modifiers: modifiers);
 
   factory TraitModel.copyOf(TraitModel original,
       {String name, int baseCost, bool hasLevels, int numberOfLevels}) {
@@ -18,6 +23,21 @@ class TraitModel extends gurps.Trait {
         name: name ?? original.name,
         hasLevels: hasLevels ?? original.hasLevels,
         numberOfLevels: numberOfLevels ?? original.numberOfLevels);
+  }
+
+  factory TraitModel.addModifier(TraitModel model, Modifier modifier) {
+    return TraitModel(
+        baseCost: model.baseCost,
+        hasLevels: model.hasLevels,
+        name: model.name,
+        numberOfLevels: model.numberOfLevels,
+        modifiers: addModifierTo(model.modifiers, Modifier(name: 'Foo')));
+  }
+
+  static List<Modifier> addModifierTo(List<Modifier> list, Modifier mod) {
+    var mods = List<Modifier>.from(list, growable: true);
+    mods.add(mod);
+    return mods;
   }
 
   @override
