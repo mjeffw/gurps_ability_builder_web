@@ -53,6 +53,7 @@ class TraitModel extends Trait {
     return otherModel.baseCost == this.baseCost &&
         otherModel.hasLevels == this.hasLevels &&
         otherModel.name == this.name &&
+        otherModel.numberOfLevels == this.numberOfLevels &&
         listEquals(otherModel.modifiers, this.modifiers);
   }
 
