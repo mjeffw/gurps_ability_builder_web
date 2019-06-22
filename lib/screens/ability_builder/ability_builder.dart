@@ -5,6 +5,8 @@ import 'package:gurps_ability_builder_web/screens/ability_builder/trait_cost.dar
 import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_field.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
+import 'trait_card.dart';
+
 const _widescreenWidthMinimum = 600.0;
 
 class AbilityBuilder extends StatelessWidget {
@@ -27,6 +29,10 @@ class AbilityBuilder extends StatelessWidget {
   }
 }
 
+///
+/// AbilityPanel may be able to become a StatelessWidget since the model has
+///  been refactored out.
+///
 class AbilityPanel extends StatefulWidget {
   @override
   _AbilityPanelState createState() => _AbilityPanelState();
@@ -59,67 +65,42 @@ class _AbilityPanelState extends State<AbilityPanel> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           children: <Widget>[
             Text('${_width.toString()}:$_isWideScreen'),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: TraitCard(),
-            ),
-            for (var modifier in model.modifiers)
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ModifierCard(modifier)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                FloatingActionButton.extended(
-                  onPressed: () {
-                    TraitModel.update(context,
-                        TraitModel.addModifier(model, Modifier(name: 'Foo')));
-                  },
-                  label: Text('Add Modifier'),
-                  icon: Icon(Icons.add),
-                ),
-              ],
-            ),
+            _traitCard(),
+            for (var modifier in model.modifiers) _modifierCard(modifier),
+            _addModifierButton(model, context),
           ],
         ),
       ),
     );
   }
-}
 
-Container _buildContainer(Widget widget) {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    alignment: Alignment.bottomLeft,
-    child: widget,
-  );
-}
+  Widget _traitCard() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TraitCard(),
+    );
+  }
 
-class TraitCard extends StatelessWidget {
-  const TraitCard({
-    Key key,
-  }) : super(key: key);
+  Widget _modifierCard(Modifier modifier) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ModifierCard(modifier));
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    final TraitModel model = TraitModel.of(context);
-
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Trait: ${model.name} [${model.unmodifiedCost}]',
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-            ),
-            _buildContainer(TraitNameField()),
-            _buildContainer(TraitCost()),
-          ],
+  Widget _addModifierButton(TraitModel model, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        FloatingActionButton.extended(
+          onPressed: () {
+            TraitModel.update(
+                context, TraitModel.addModifier(model, Modifier(name: 'Foo')));
+          },
+          label: Text('Add Modifier'),
+          icon: Icon(Icons.add),
         ),
-      ),
+      ],
     );
   }
 }

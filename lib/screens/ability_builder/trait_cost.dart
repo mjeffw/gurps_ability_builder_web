@@ -42,7 +42,7 @@ class TraitCost extends StatelessWidget {
             visible: model.hasLevels,
             child: TextField(
               inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(labelText: label, filled: true),
+              decoration: InputDecoration(labelText: 'Levels', filled: true),
               keyboardType: TextInputType.number,
               controller: TextEditingController(
                 text: model.numberOfLevels.toString(),
