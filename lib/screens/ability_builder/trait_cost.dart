@@ -36,7 +36,8 @@ class TraitCost extends StatelessWidget {
               TraitModel.update(
                   context, TraitModel.copyOf(model, hasLevels: hasLevels));
             },
-            hasLevels: model.hasLevels),
+            value: model.hasLevels,
+            prompt: 'Has Levels'),
         Expanded(
           child: Visibility(
             visible: model.hasLevels,
