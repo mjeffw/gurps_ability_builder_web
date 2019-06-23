@@ -15,22 +15,7 @@ class TraitCost extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        Expanded(
-          child: TextField(
-            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-            decoration: InputDecoration(labelText: label, filled: true),
-            onChanged: (text) {
-              TraitModel.update(
-                  context,
-                  TraitModel.copyOf(model,
-                      baseCost: text.isEmpty ? 0 : int.parse(text)));
-            },
-            keyboardType: TextInputType.number,
-            controller: TextEditingController(
-              text: model.baseCost.toString(),
-            ),
-          ),
-        ),
+        Expanded(child: Container()),
         PlatformCheckbox(
             onChanged: (hasLevels) {
               TraitModel.update(
@@ -38,9 +23,14 @@ class TraitCost extends StatelessWidget {
             },
             value: model.hasLevels,
             prompt: 'Has Levels'),
-        Expanded(
-          child: Visibility(
-            visible: model.hasLevels,
+        Visibility(
+          visible: model.hasLevels,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: Container(
+            margin: EdgeInsets.only(left: 16.0),
+            width: 140.0,
             child: TextField(
               inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
               decoration: InputDecoration(labelText: 'Levels', filled: true),

@@ -30,7 +30,7 @@ class ModifierCard extends StatelessWidget {
                     child: TextField(
                       controller: TextEditingController(text: _modifier.name),
                       decoration: InputDecoration(
-                        labelText: 'Name',
+                        labelText: 'Modifier Name',
                         suffixIcon: IconButton(
                           alignment: Alignment.bottomCenter,
                           icon: Icon(Icons.arrow_drop_down_circle),
@@ -42,6 +42,7 @@ class ModifierCard extends StatelessWidget {
                     ),
                   ),
                   IconButton(
+                    alignment: Alignment.topRight,
                     icon: Icon(
                       Icons.delete_forever,
                       color: Colors.red,
