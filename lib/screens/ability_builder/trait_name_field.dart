@@ -27,6 +27,7 @@ class TraitNameField extends StatelessWidget {
           margin: EdgeInsets.only(left: 16.0),
           width: 140.0,
           child: TextField(
+            textAlign: TextAlign.right,
             inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
             decoration: InputDecoration(labelText: label, filled: true),
             onChanged: (text) {
