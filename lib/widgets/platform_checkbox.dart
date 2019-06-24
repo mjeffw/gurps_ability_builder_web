@@ -15,10 +15,10 @@ class PlatformCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var checkbox = Switch(onChanged: onChanged, value: value);
-    //  (Platform.isIOS || Platform.isMacOS)
-    //     ? Switch(onChanged: onChanged, value: value)
-    //     : Checkbox(onChanged: onChanged, value: value);
+    var checkbox = // Switch(onChanged: onChanged, value: value);
+     (Platform.isIOS || Platform.isMacOS)
+        ? Switch(onChanged: onChanged, value: value)
+        : Checkbox(onChanged: onChanged, value: value);
 
     return Row(
       children: <Widget>[

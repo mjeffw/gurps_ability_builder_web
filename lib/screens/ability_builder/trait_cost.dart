@@ -11,8 +11,6 @@ class TraitCost extends StatelessWidget {
   Widget build(BuildContext context) {
     final TraitModel model = TraitModel.of(context);
 
-    var label = model.hasLevels ? 'Cost Per Level' : 'Cost';
-
     return Row(
       children: <Widget>[
         Expanded(child: Container()),

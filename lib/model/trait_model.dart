@@ -34,6 +34,18 @@ class TraitModel extends Trait {
         modifiers: _addModifierTo(model.modifiers, Modifier(name: 'Foo')));
   }
 
+  factory TraitModel.updateModifier(TraitModel model,
+      {int index, Modifier modifier}) {
+    var list = List<Modifier>.of(model.modifiers);
+    list[index] = modifier;
+    return TraitModel(
+        baseCost: model.baseCost,
+        hasLevels: model.hasLevels,
+        name: model.name,
+        numberOfLevels: model.numberOfLevels,
+        modifiers: list);
+  }
+
   static List<Modifier> _addModifierTo(List<Modifier> list, Modifier mod) {
     var mods = List<Modifier>.from(list, growable: true);
     mods.add(mod);

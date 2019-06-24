@@ -10,12 +10,13 @@ import 'package:gurps_modifiers/src/modifier.dart';
 class ModifierCard extends StatelessWidget {
   final Modifier _modifier;
 
-  ModifierCard(this._modifier);
+  ModifierCard(this._modifier) : assert(_modifier != null);
 
   @override
   Widget build(BuildContext context) {
     final TraitModel model = TraitModel.of(context);
-    final int index = model.modifiers.indexOf(_modifier);
+    final int index =
+        model.modifiers.indexWhere((a) => identical(_modifier, a));
 
     return Card(
       child: Padding(
@@ -39,6 +40,19 @@ class ModifierCard extends StatelessWidget {
                           },
                         ),
                       ),
+                      onChanged: (text) {
+                        // Modifier m =
+                        //     TraitModel.copyOfModifier(_modifier, name: text);
+                        TraitModel.update(
+                            context,
+                            TraitModel.updateModifier(model,
+                                index: index,
+                                modifier: Modifier(
+                                    name: text,
+                                    isAttackModifier:
+                                        _modifier.isAttackModifier,
+                                    value: _modifier.value)));
+                      },
                     ),
                   ),
                   IconButton(
