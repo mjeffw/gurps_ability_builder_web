@@ -1,6 +1,8 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
+import 'modifier_model.dart';
+
 @immutable
 class TraitModel extends Trait {
   const TraitModel(
@@ -31,7 +33,8 @@ class TraitModel extends Trait {
         hasLevels: model.hasLevels,
         name: model.name,
         numberOfLevels: model.numberOfLevels,
-        modifiers: _addModifierTo(model.modifiers, Modifier(name: 'Foo')));
+        modifiers:
+            _addModifierTo(model.modifiers, SimpleModifier(name: 'Foo')));
   }
 
   factory TraitModel.updateModifier(TraitModel model,
@@ -44,12 +47,6 @@ class TraitModel extends Trait {
         name: model.name,
         numberOfLevels: model.numberOfLevels,
         modifiers: list);
-  }
-
-  static List<Modifier> _addModifierTo(List<Modifier> list, Modifier mod) {
-    var mods = List<Modifier>.from(list, growable: true);
-    mods.add(mod);
-    return mods;
   }
 
   @override
@@ -75,32 +72,48 @@ class TraitModel extends Trait {
       this.modifiers.map((m) => m.hashCode).reduce((a, b) => a ^ b);
 
   static TraitModel of(BuildContext context) {
-    final _ModelBindingScope scope =
-        context.inheritFromWidgetOfExactType(_ModelBindingScope);
+    final _TraitModelBindingScope scope =
+        context.inheritFromWidgetOfExactType(_TraitModelBindingScope);
     return scope.modelBindingState.currentModel;
   }
 
   static void update(BuildContext context, TraitModel newModel) {
-    final _ModelBindingScope scope =
-        context.inheritFromWidgetOfExactType(_ModelBindingScope);
+    final _TraitModelBindingScope scope =
+        context.inheritFromWidgetOfExactType(_TraitModelBindingScope);
     scope.modelBindingState.updateModel(newModel);
+  }
+
+  ModifierModel modifierModel(int index) {
+    return ModifierModel(
+        name: '',
+        isAttackModifier: false,
+        percentage: 0,
+        onUpdate: (m) {
+          TraitModel.updateModifier(this, index: index, modifier: m);
+        });
   }
 }
 
-class _ModelBindingScope extends InheritedWidget {
-  _ModelBindingScope({
+List<Modifier> _addModifierTo(List<Modifier> list, Modifier mod) {
+  var mods = List<Modifier>.from(list, growable: true);
+  mods.add(mod);
+  return List.unmodifiable(mods);
+}
+
+class _TraitModelBindingScope extends InheritedWidget {
+  _TraitModelBindingScope({
     Key key,
     @required this.modelBindingState,
     Widget child,
   })  : assert(modelBindingState != null),
         super(key: key, child: child);
-  final _ModelBindingState modelBindingState;
+  final _TraitModelBindingState modelBindingState;
   @override
-  bool updateShouldNotify(_ModelBindingScope oldWidget) => true;
+  bool updateShouldNotify(_TraitModelBindingScope oldWidget) => true;
 }
 
-class ModelBinding extends StatefulWidget {
-  ModelBinding({
+class TraitModelBinding extends StatefulWidget {
+  TraitModelBinding({
     Key key,
     this.initialModel = const TraitModel(),
     this.child,
@@ -108,10 +121,10 @@ class ModelBinding extends StatefulWidget {
         super(key: key);
   final TraitModel initialModel;
   final Widget child;
-  _ModelBindingState createState() => _ModelBindingState();
+  _TraitModelBindingState createState() => _TraitModelBindingState();
 }
 
-class _ModelBindingState extends State<ModelBinding> {
+class _TraitModelBindingState extends State<TraitModelBinding> {
   TraitModel currentModel;
   @override
   void initState() {
@@ -130,7 +143,7 @@ class _ModelBindingState extends State<ModelBinding> {
 
   @override
   Widget build(BuildContext context) {
-    return _ModelBindingScope(
+    return _TraitModelBindingScope(
       modelBindingState: this,
       child: widget.child,
     );

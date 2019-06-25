@@ -14,5 +14,13 @@
                 "asset": "Muli-Light.ttf"
             }
         ]
+    },
+    {
+        "family": "GurpsIcons",
+        "fonts": [
+            {
+                "asset": "GurpsIcons.ttf"
+            }
+        ]
     }
 ]

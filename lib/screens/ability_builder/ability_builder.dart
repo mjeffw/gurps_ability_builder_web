@@ -1,4 +1,5 @@
 import 'package:flutter_web/material.dart';
+import 'package:gurps_ability_builder_web/model/modifier_model.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
@@ -12,7 +13,7 @@ class AbilityBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ModelBinding(
+    return TraitModelBinding(
       initialModel: const TraitModel(),
       child: Scaffold(
         appBar: AppBar(
@@ -64,7 +65,8 @@ class _AbilityPanelState extends State<AbilityPanel> {
           children: <Widget>[
             Text('${_width.toString()}:$_isWideScreen'),
             _traitCard(),
-            for (var modifier in model.modifiers) _modifierCard(modifier),
+            for (var index in model.modifiers.asMap().keys)
+              _modifierCard(model, index),
             _addModifierButton(model, context),
           ],
         ),
@@ -79,10 +81,13 @@ class _AbilityPanelState extends State<AbilityPanel> {
     );
   }
 
-  Widget _modifierCard(Modifier modifier) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ModifierCard(modifier));
+  Widget _modifierCard(TraitModel trait, int index) {
+    return ModifierModelBinding(
+      initialModel: trait.modifierModel(index),
+      child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ModifierCard()),
+    );
   }
 
   Widget _addModifierButton(TraitModel model, BuildContext context) {
@@ -92,8 +97,8 @@ class _AbilityPanelState extends State<AbilityPanel> {
       children: <Widget>[
         FloatingActionButton.extended(
           onPressed: () {
-            TraitModel.update(
-                context, TraitModel.addModifier(model, Modifier(name: 'Foo')));
+            TraitModel.update(context,
+                TraitModel.addModifier(model, SimpleModifier(name: 'Foo')));
           },
           label: Text('Add Modifier'),
           icon: Icon(Icons.add),

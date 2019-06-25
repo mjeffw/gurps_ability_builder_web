@@ -2,21 +2,15 @@ import 'dart:html';
 
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/painting.dart';
-import 'package:gurps_ability_builder_web/model/trait_model.dart';
+import 'package:gurps_ability_builder_web/model/modifier_model.dart';
 import 'package:gurps_ability_builder_web/widgets/common.dart';
+import 'package:gurps_ability_builder_web/widgets/gurps_icons.dart';
 import 'package:gurps_ability_builder_web/widgets/platform_checkbox.dart';
-import 'package:gurps_modifiers/src/modifier.dart';
 
 class ModifierCard extends StatelessWidget {
-  final Modifier _modifier;
-
-  ModifierCard(this._modifier) : assert(_modifier != null);
-
   @override
   Widget build(BuildContext context) {
-    final TraitModel model = TraitModel.of(context);
-    final int index =
-        model.modifiers.indexWhere((a) => identical(_modifier, a));
+    final ModifierModel model = ModifierModel.of(context);
 
     return Card(
       child: Padding(
@@ -24,12 +18,29 @@ class ModifierCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(
+                  'Modifier: ${model.name} (${model.percentage})',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Visibility(
+                      visible: model.isAttackModifier,
+                      child: Icon(GurpsIcons.gun),
+                    ),
+                  ),
+                )
+              ],
+            ),
             buildContainer(
               Row(
                 children: <Widget>[
                   Expanded(
                     child: TextField(
-                      controller: TextEditingController(text: _modifier.name),
+                      controller: TextEditingController(text: model.name),
                       decoration: InputDecoration(
                         labelText: 'Modifier Name',
                         suffixIcon: IconButton(
@@ -41,17 +52,13 @@ class ModifierCard extends StatelessWidget {
                         ),
                       ),
                       onChanged: (text) {
-                        // Modifier m =
-                        //     TraitModel.copyOfModifier(_modifier, name: text);
-                        TraitModel.update(
-                            context,
-                            TraitModel.updateModifier(model,
-                                index: index,
-                                modifier: Modifier(
-                                    name: text,
-                                    isAttackModifier:
-                                        _modifier.isAttackModifier,
-                                    value: _modifier.value)));
+                        ModifierModel.update(
+                          context,
+                          ModifierModel.copyOf(model,
+                              name: text,
+                              isAttackModifier: model.isAttackModifier,
+                              percentage: model.percentage),
+                        );
                       },
                     ),
                   ),
@@ -71,12 +78,21 @@ class ModifierCard extends StatelessWidget {
               Row(
                 children: <Widget>[
                   PlatformCheckbox(
-                    value: _modifier.isAttackModifier,
+                    value: model.isAttackModifier,
                     prompt: 'Attack Modifier',
-                    onChanged: null,
+                    onChanged: (b) {
+                      ModifierModel.update(context,
+                          ModifierModel.copyOf(model, isAttackModifier: b));
+                    },
                   ),
                   Expanded(
                     child: TextField(
+                      onChanged: (text) {
+                        ModifierModel.update(
+                            context,
+                            ModifierModel.copyOf(model,
+                                percentage: int.parse(text)));
+                      },
                       textAlign: TextAlign.right,
                       decoration: const InputDecoration(
                         labelText: 'Value',
@@ -84,7 +100,7 @@ class ModifierCard extends StatelessWidget {
                         suffix: Text('%'),
                       ),
                       controller: TextEditingController(
-                          text: _modifier.value.toString()),
+                          text: model.percentage.toString()),
                     ),
                   ),
                 ],
