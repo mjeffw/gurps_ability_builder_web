@@ -1,5 +1,4 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/model/modifier_model.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
@@ -82,12 +81,9 @@ class _AbilityPanelState extends State<AbilityPanel> {
   }
 
   Widget _modifierCard(TraitModel trait, int index) {
-    return ModifierModelBinding(
-      initialModel: trait.modifierModel(index),
-      child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: ModifierCard()),
-    );
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ModifierCard(index));
   }
 
   Widget _addModifierButton(TraitModel model, BuildContext context) {
@@ -97,6 +93,7 @@ class _AbilityPanelState extends State<AbilityPanel> {
       children: <Widget>[
         FloatingActionButton.extended(
           onPressed: () {
+            // TODO implement a dialog to pick a Modifier and instantiate it
             TraitModel.update(context,
                 TraitModel.addModifier(model, SimpleModifier(name: '')));
           },

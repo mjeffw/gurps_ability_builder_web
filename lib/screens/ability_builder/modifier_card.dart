@@ -2,17 +2,21 @@ import 'dart:html';
 
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/painting.dart';
-import 'package:gurps_ability_builder_web/model/modifier_model.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
 import 'package:gurps_ability_builder_web/widgets/common.dart';
 import 'package:gurps_ability_builder_web/widgets/gurps_icons.dart';
 import 'package:gurps_ability_builder_web/widgets/platform_checkbox.dart';
+import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 class ModifierCard extends StatelessWidget {
+  final int index;
+
+  ModifierCard(this.index);
+
   @override
   Widget build(BuildContext context) {
-    final ModifierModel model = ModifierModel.of(context);
     final TraitModel trait = TraitModel.of(context);
+    final Modifier model = trait.modifiers[index];
 
     return Card(
       child: Padding(
@@ -54,10 +58,12 @@ class ModifierCard extends StatelessWidget {
                         ),
                       ),
                       onChanged: (text) {
-                        ModifierModel.update(
-                          context,
-                          ModifierModel.copyOf(model, name: text),
-                        );
+                        Modifier m = cloneModel(model, name: text);
+                        print('Modifier: $m');
+                        TraitModel.update(
+                            context,
+                            TraitModel.updateModifier(trait,
+                                index: index, modifier: m));
                       },
                     ),
                   ),
@@ -70,7 +76,7 @@ class ModifierCard extends StatelessWidget {
                     ),
                     onPressed: () {
                       TraitModel.update(context,
-                          TraitModel.removeModifier(trait, index: model.index));
+                          TraitModel.removeModifier(trait, index: index));
                     },
                   )
                 ],
@@ -83,17 +89,22 @@ class ModifierCard extends StatelessWidget {
                     value: model.isAttackModifier,
                     prompt: 'Attack Modifier',
                     onChanged: (b) {
-                      ModifierModel.update(context,
-                          ModifierModel.copyOf(model, isAttackModifier: b));
+                      Modifier m = cloneModel(model, isAttackModifier: b);
+                      TraitModel.update(
+                          context,
+                          TraitModel.updateModifier(trait,
+                              index: index, modifier: m));
                     },
                   ),
                   Expanded(
                     child: TextField(
                       onChanged: (text) {
-                        ModifierModel.update(
+                        Modifier m =
+                            cloneModel(model, percentage: int.parse(text));
+                        TraitModel.update(
                             context,
-                            ModifierModel.copyOf(model,
-                                percentage: int.parse(text)));
+                            TraitModel.updateModifier(trait,
+                                index: index, modifier: m));
                       },
                       textAlign: TextAlign.right,
                       decoration: const InputDecoration(
@@ -112,5 +123,15 @@ class ModifierCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Modifier cloneModel(Modifier model,
+      {String name, bool isAttackModifier, int percentage}) {
+    Modifier m;
+    if (model is SimpleModifier) {
+      return SimpleModifier.copyOf(model,
+          value: percentage, name: name, isAttackModifier: isAttackModifier);
+    }
+    return m;
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/model/modifier_model.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 @immutable
@@ -59,7 +58,7 @@ class TraitModel extends Trait {
   @override
   String toString() =>
       'Trait(name: $name, baseCost: $baseCost, hasLevels: $hasLevels, '
-      'numberOfLevels: $numberOfLevels)';
+      'numberOfLevels: $numberOfLevels, modifiers: ${this.modifiers})';
 
   @override
   bool operator ==(Object other) {
@@ -90,17 +89,17 @@ class TraitModel extends Trait {
     scope.modelBindingState.updateModel(newModel);
   }
 
-  ModifierModel modifierModel(int index) {
-    return ModifierModel(
-      name: '',
-      isAttackModifier: false,
-      percentage: 0,
-      index: index,
-      onUpdate: (m) {
-        TraitModel.updateModifier(this, index: index, modifier: m);
-      },
-    );
-  }
+  // ModifierModel modifierModel(int index) {
+  //   return ModifierModel(
+  //     name: '',
+  //     isAttackModifier: false,
+  //     percentage: 0,
+  //     index: index,
+  //     onUpdate: (m) {
+  //       TraitModel.updateModifier(this, index: index, modifier: m);
+  //     },
+  //   );
+  // }
 }
 
 List<Modifier> _addModifierTo(List<Modifier> list, Modifier mod) {
