@@ -1,7 +1,6 @@
 import 'package:flutter_web/material.dart';
+import 'package:gurps_ability_builder_web/model/modifier_model.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
-
-import 'modifier_model.dart';
 
 @immutable
 class TraitModel extends Trait {
@@ -19,22 +18,22 @@ class TraitModel extends Trait {
             modifiers: modifiers);
 
   factory TraitModel.copyOf(TraitModel original,
-      {String name, int baseCost, bool hasLevels, int numberOfLevels}) {
+      {String name,
+      int baseCost,
+      bool hasLevels,
+      int numberOfLevels,
+      List<Modifier> modifiers}) {
     return TraitModel(
         baseCost: baseCost ?? original.baseCost,
         name: name ?? original.name,
         hasLevels: hasLevels ?? original.hasLevels,
-        numberOfLevels: numberOfLevels ?? original.numberOfLevels);
+        numberOfLevels: numberOfLevels ?? original.numberOfLevels,
+        modifiers: modifiers ?? original.modifiers);
   }
 
   factory TraitModel.addModifier(TraitModel model, Modifier modifier) {
-    return TraitModel(
-        baseCost: model.baseCost,
-        hasLevels: model.hasLevels,
-        name: model.name,
-        numberOfLevels: model.numberOfLevels,
-        modifiers:
-            _addModifierTo(model.modifiers, SimpleModifier(name: 'Foo')));
+    return TraitModel.copyOf(model,
+        modifiers: _addModifierTo(model.modifiers, SimpleModifier(name: '')));
   }
 
   factory TraitModel.updateModifier(TraitModel model,
@@ -47,6 +46,14 @@ class TraitModel extends Trait {
         name: model.name,
         numberOfLevels: model.numberOfLevels,
         modifiers: list);
+  }
+
+  factory TraitModel.removeModifier(TraitModel trait, {int index}) {
+    print('remove $index');
+    List<Modifier> list = List<Modifier>.of(trait.modifiers);
+    print('${list[index]}');
+    list.removeAt(index);
+    return TraitModel.copyOf(trait, modifiers: list);
   }
 
   @override
@@ -85,12 +92,14 @@ class TraitModel extends Trait {
 
   ModifierModel modifierModel(int index) {
     return ModifierModel(
-        name: '',
-        isAttackModifier: false,
-        percentage: 0,
-        onUpdate: (m) {
-          TraitModel.updateModifier(this, index: index, modifier: m);
-        });
+      name: '',
+      isAttackModifier: false,
+      percentage: 0,
+      index: index,
+      onUpdate: (m) {
+        TraitModel.updateModifier(this, index: index, modifier: m);
+      },
+    );
   }
 }
 

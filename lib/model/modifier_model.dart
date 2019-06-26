@@ -4,9 +4,15 @@ import 'package:gurps_modifiers/gurps_modifiers.dart';
 @immutable
 class ModifierModel extends SimpleModifier {
   final ValueChanged<ModifierModel> onUpdate;
-  const ModifierModel(
-      {int percentage, String name, bool isAttackModifier, this.onUpdate})
-      : super(
+  final int index;
+
+  const ModifierModel({
+    int percentage,
+    String name,
+    bool isAttackModifier,
+    this.index,
+    this.onUpdate,
+  }) : super(
             percentage: percentage,
             name: name,
             isAttackModifier: isAttackModifier);
@@ -16,8 +22,9 @@ class ModifierModel extends SimpleModifier {
     return ModifierModel(
         name: name ?? original.name,
         percentage: percentage ?? original.percentage,
-        isAttackModifier: isAttackModifier,
-        onUpdate: original.onUpdate);
+        isAttackModifier: isAttackModifier ?? original.isAttackModifier,
+        onUpdate: original.onUpdate,
+        index: original.index);
   }
 
   @override
@@ -39,20 +46,20 @@ class ModifierModel extends SimpleModifier {
       percentage.hashCode ^ name.hashCode ^ isAttackModifier.hashCode;
 
   static ModifierModel of(BuildContext context) {
-    final _ModelBindingScope scope =
-        context.inheritFromWidgetOfExactType(_ModelBindingScope);
+    final _ModifierModelBindingScope scope =
+        context.inheritFromWidgetOfExactType(_ModifierModelBindingScope);
     return scope.modelBindingState.currentModel;
   }
 
   static void update(BuildContext context, ModifierModel newModel) {
-    final _ModelBindingScope scope =
-        context.inheritFromWidgetOfExactType(_ModelBindingScope);
+    final _ModifierModelBindingScope scope =
+        context.inheritFromWidgetOfExactType(_ModifierModelBindingScope);
     scope.modelBindingState.updateModel(newModel);
   }
 }
 
-class _ModelBindingScope extends InheritedWidget {
-  _ModelBindingScope({
+class _ModifierModelBindingScope extends InheritedWidget {
+  _ModifierModelBindingScope({
     Key key,
     @required this.modelBindingState,
     Widget child,
@@ -60,7 +67,7 @@ class _ModelBindingScope extends InheritedWidget {
         super(key: key, child: child);
   final _ModifierModelBindingState modelBindingState;
   @override
-  bool updateShouldNotify(_ModelBindingScope oldWidget) => true;
+  bool updateShouldNotify(_ModifierModelBindingScope oldWidget) => true;
 }
 
 class ModifierModelBinding extends StatefulWidget {
@@ -97,7 +104,7 @@ class _ModifierModelBindingState extends State<ModifierModelBinding> {
 
   @override
   Widget build(BuildContext context) {
-    return _ModelBindingScope(
+    return _ModifierModelBindingScope(
       modelBindingState: this,
       child: widget.child,
     );

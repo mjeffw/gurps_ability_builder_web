@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/painting.dart';
 import 'package:gurps_ability_builder_web/model/modifier_model.dart';
+import 'package:gurps_ability_builder_web/model/trait_model.dart';
 import 'package:gurps_ability_builder_web/widgets/common.dart';
 import 'package:gurps_ability_builder_web/widgets/gurps_icons.dart';
 import 'package:gurps_ability_builder_web/widgets/platform_checkbox.dart';
@@ -11,6 +12,7 @@ class ModifierCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ModifierModel model = ModifierModel.of(context);
+    final TraitModel trait = TraitModel.of(context);
 
     return Card(
       child: Padding(
@@ -54,10 +56,7 @@ class ModifierCard extends StatelessWidget {
                       onChanged: (text) {
                         ModifierModel.update(
                           context,
-                          ModifierModel.copyOf(model,
-                              name: text,
-                              isAttackModifier: model.isAttackModifier,
-                              percentage: model.percentage),
+                          ModifierModel.copyOf(model, name: text),
                         );
                       },
                     ),
@@ -69,7 +68,10 @@ class ModifierCard extends StatelessWidget {
                       color: Colors.red,
                       size: 36.0,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      TraitModel.update(context,
+                          TraitModel.removeModifier(trait, index: model.index));
+                    },
                   )
                 ],
               ),
