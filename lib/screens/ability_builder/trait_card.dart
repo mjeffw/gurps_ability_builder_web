@@ -1,9 +1,8 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
+import 'package:gurps_ability_builder_web/screens/ability_builder/trait_level_cost_row.dart';
+import 'package:gurps_ability_builder_web/screens/ability_builder/trait_name_row.dart';
 import 'package:gurps_ability_builder_web/widgets/common.dart';
-
-import 'trait_cost.dart';
-import 'trait_name_field.dart';
 
 class TraitCard extends StatelessWidget {
   const TraitCard({
@@ -21,11 +20,11 @@ class TraitCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Trait: ${model.name} [${model.unmodifiedCost}]',
+              '${model.name.isEmpty ? "Trait " : ""}${model.name} [${model.unmodifiedCost}]',
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
-            buildContainer(TraitNameField()),
-            buildContainer(TraitCost()),
+            buildContainer(TraitNameRow()),
+            buildContainer(TraitLevelCostRow()),
           ],
         ),
       ),

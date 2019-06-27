@@ -1,13 +1,13 @@
 import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
 
-class TraitNameField extends StatelessWidget {
-  const TraitNameField({Key key}) : super(key: key);
+class TraitNameRow extends StatelessWidget {
+  const TraitNameRow({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TraitModel model = TraitModel.of(context);
-    final label = model.hasLevels ? 'Cost Per Level' : 'Cost';
+    final label = model.hasLevels ? 'Per Level' : 'Cost';
 
     return Row(
       children: <Widget>[
@@ -25,7 +25,7 @@ class TraitNameField extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.only(left: 16.0),
-          width: 140.0,
+          width: 100.0,
           child: TextField(
             textAlign: TextAlign.right,
             inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],

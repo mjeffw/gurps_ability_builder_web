@@ -2,8 +2,8 @@ import 'package:flutter_web/material.dart';
 import 'package:gurps_ability_builder_web/model/trait_model.dart';
 import 'package:gurps_ability_builder_web/widgets/platform_checkbox.dart';
 
-class TraitCost extends StatelessWidget {
-  const TraitCost({
+class TraitLevelCostRow extends StatelessWidget {
+  const TraitLevelCostRow({
     Key key,
   }) : super(key: key);
 
@@ -28,7 +28,7 @@ class TraitCost extends StatelessWidget {
           maintainState: true,
           child: Container(
             margin: EdgeInsets.only(left: 16.0),
-            width: 140.0,
+            width: 100.0,
             child: TextField(
               textAlign: TextAlign.right,
               inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
