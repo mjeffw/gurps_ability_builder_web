@@ -1,5 +1,6 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/model/trait_model.dart';
+
+import '../../model/trait_model.dart';
 
 class TraitNameRow extends StatelessWidget {
   const TraitNameRow({Key key}) : super(key: key);

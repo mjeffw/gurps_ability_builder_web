@@ -1,6 +1,7 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/model/trait_model.dart';
-import 'package:gurps_ability_builder_web/widgets/platform_checkbox.dart';
+
+import '../../model/trait_model.dart';
+import '../../widgets/platform_checkbox.dart';
 
 class TraitLevelCostRow extends StatelessWidget {
   const TraitLevelCostRow({

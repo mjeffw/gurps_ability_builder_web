@@ -1,5 +1,6 @@
-import 'package:flutter_web/services.dart';
 import 'dart:async';
+
+import 'package:flutter_web/services.dart';
 
 /// A base class to handle the subscribing events
 class KeyboardVisibilitySubscriber {

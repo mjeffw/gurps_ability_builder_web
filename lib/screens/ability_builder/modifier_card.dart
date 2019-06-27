@@ -2,10 +2,12 @@ import 'dart:html';
 
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/painting.dart';
-import 'package:gurps_ability_builder_web/model/trait_model.dart';
-import 'package:gurps_ability_builder_web/widgets/common.dart';
-import 'package:gurps_ability_builder_web/widgets/gurps_icons.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
+
+import '../../model/trait_model.dart';
+import '../../widgets/common.dart';
+import '../../widgets/gurps_icons.dart';
+import '../../widgets/type_ahead_textfield.dart';
 
 class ModifierCard extends StatelessWidget {
   final int index;
@@ -38,19 +40,7 @@ class ModifierCard extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: TextField(
-            autofocus: true,
-            controller: TextEditingController(text: model.name),
-            decoration: const InputDecoration(
-              labelText: 'Modifier Name',
-              filled: true,
-            ),
-            onChanged: (text) {
-              Modifier m = cloneModel(model, name: text);
-              TraitModel.update(context,
-                  TraitModel.updateModifier(trait, index: index, modifier: m));
-            },
-          ),
+          child: _nameField(model, context, trait),
         ),
         Container(
           margin: EdgeInsets.only(left: 16.0),
@@ -73,6 +63,68 @@ class ModifierCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _nameField(Modifier model, BuildContext context, TraitModel trait) {
+    // return AutoCompleteTextView(
+    //   tfTextDecoration: const InputDecoration(
+    //     labelText: 'Modifier Name',
+    //     filled: true,
+    //   ),
+    //   onValueChanged: (text) {
+    //     Modifier m = cloneModel(model, name: text);
+    //     TraitModel.update(context,
+    //         TraitModel.updateModifier(trait, index: index, modifier: m));
+    //   },
+    //   controller: TextEditingController(text: model.name),
+    //   getSuggestionsMethod: (pattern) {
+    //     print(pattern);
+    //     var all = modifiers.fetchEntries().where((it) {
+    //       var itLowerCase = it.key.toLowerCase();
+    //       print(itLowerCase);
+    //       return itLowerCase.startsWith(pattern.toString().toLowerCase());
+    //     });
+    //     var list = all.map((it) => it.key).toList();
+    //     print('matches: ${list.length}');
+    //     return list;
+    //   },
+    //   suggestionsApiFetchDelay: 500,
+    // );
+    return TypeAheadField<MapEntry<String, ModifierFactory>>(
+      textFieldConfiguration: TextFieldConfiguration(
+          autofocus: true,
+          controller: TextEditingController(text: model.name),
+          decoration: const InputDecoration(
+            labelText: 'Modifier Name',
+            filled: true,
+          ),
+          onChanged: (text) {
+            Modifier m = cloneModel(model, name: text);
+            TraitModel.update(context,
+                TraitModel.updateModifier(trait, index: index, modifier: m));
+          }),
+      suggestionsCallback: (pattern) async {
+        return await _suggestionsCallback(pattern);
+      },
+      itemBuilder: (context, suggestion) {
+        print(suggestion);
+        return ListTile(title: Text(suggestion.key));
+      },
+      onSuggestionSelected: (suggestion) {
+        // TODO modify Modifier to match
+      },
+    );
+  }
+
+  List<MapEntry<String, ModifierFactory>> _suggestionsCallback(String pattern) {
+    print(pattern);
+    var fetchEntries = modifiers.fetchEntries();
+    print('total entries = ${fetchEntries.length}');
+    var list = fetchEntries.where((test) {
+      return test.key.toLowerCase().startsWith(pattern.toLowerCase());
+    }).toList();
+    print('potential matches = ${list.length}');
+    return list;
   }
 
   Row _titleRow(BuildContext context) {

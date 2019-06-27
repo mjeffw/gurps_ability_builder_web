@@ -230,7 +230,8 @@ import 'dart:math';
 
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/services.dart';
-import 'package:gurps_ability_builder_web/widgets/keyboard_visibility.dart';
+
+import 'keyboard_visibility.dart';
 
 typedef FutureOr<List<T>> SuggestionsCallback<T>(String pattern);
 typedef Widget ItemBuilder<T>(BuildContext context, T itemData);
@@ -257,33 +258,33 @@ class TypeAheadFormField<T> extends FormField<String> {
   TypeAheadFormField(
       {Key key,
       String initialValue,
-      bool getImmediateSuggestions: false,
-      bool autovalidate: false,
+      bool getImmediateSuggestions = false,
+      bool autovalidate = false,
       FormFieldSetter<String> onSaved,
       FormFieldValidator<String> validator,
       ErrorBuilder errorBuilder,
       WidgetBuilder noItemsFoundBuilder,
       WidgetBuilder loadingBuilder,
-      Duration debounceDuration: const Duration(milliseconds: 300),
-      SuggestionsBoxDecoration suggestionsBoxDecoration:
+      Duration debounceDuration = const Duration(milliseconds: 300),
+      SuggestionsBoxDecoration suggestionsBoxDecoration =
           const SuggestionsBoxDecoration(),
       SuggestionsBoxController suggestionsBoxController,
       @required SuggestionSelectionCallback<T> onSuggestionSelected,
       @required ItemBuilder<T> itemBuilder,
       @required SuggestionsCallback<T> suggestionsCallback,
-      double suggestionsBoxVerticalOffset: 5.0,
-      this.textFieldConfiguration: const TextFieldConfiguration(),
+      double suggestionsBoxVerticalOffset = 5.0,
+      this.textFieldConfiguration = const TextFieldConfiguration(),
       AnimationTransitionBuilder transitionBuilder,
-      Duration animationDuration: const Duration(milliseconds: 500),
-      double animationStart: 0.25,
-      AxisDirection direction: AxisDirection.down,
-      bool hideOnLoading: false,
-      bool hideOnEmpty: false,
-      bool hideOnError: false,
-      bool hideSuggestionsOnKeyboardHide: true,
-      bool keepSuggestionsOnLoading: true,
-      bool keepSuggestionsOnSuggestionSelected: false,
-      bool autoFlipDirection: false})
+      Duration animationDuration = const Duration(milliseconds: 500),
+      double animationStart = 0.25,
+      AxisDirection direction = AxisDirection.down,
+      bool hideOnLoading = false,
+      bool hideOnEmpty = false,
+      bool hideOnError = false,
+      bool hideSuggestionsOnKeyboardHide = true,
+      bool keepSuggestionsOnLoading = true,
+      bool keepSuggestionsOnSuggestionSelected = false,
+      bool autoFlipDirection = false})
       : assert(
             initialValue == null || textFieldConfiguration.controller == null),
         super(
@@ -368,13 +369,15 @@ class _TypeAheadFormFieldState<T> extends FormFieldState<String> {
           ?.addListener(_handleControllerChanged);
 
       if (oldWidget.textFieldConfiguration.controller != null &&
-          widget.textFieldConfiguration.controller == null)
+          widget.textFieldConfiguration.controller == null) {
         _controller = TextEditingController.fromValue(
             oldWidget.textFieldConfiguration.controller.value);
+      }
       if (widget.textFieldConfiguration.controller != null) {
         setValue(widget.textFieldConfiguration.controller.text);
-        if (oldWidget.textFieldConfiguration.controller == null)
+        if (oldWidget.textFieldConfiguration.controller == null) {
           _controller = null;
+        }
       }
     }
   }
@@ -402,8 +405,9 @@ class _TypeAheadFormFieldState<T> extends FormFieldState<String> {
     // notifications for changes originating from within this class -- for
     // example, the reset() method. In such cases, the FormField value will
     // already have been set.
-    if (_effectiveController.text != value)
+    if (_effectiveController.text != value) {
       didChange(_effectiveController.text);
+    }
   }
 }
 

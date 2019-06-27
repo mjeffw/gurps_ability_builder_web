@@ -1,7 +1,7 @@
 import 'package:flutter_web/material.dart';
-import 'package:gurps_ability_builder_web/model/trait_model.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
+import '../../model/trait_model.dart';
 import 'modifier_card.dart';
 import 'trait_card.dart';
 
@@ -47,16 +47,15 @@ class _AbilityPanelState extends State<AbilityPanel> {
         title: Text("Ability Builder"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Scrollbar(
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             children: <Widget>[
               Text('${_width.toString()}:$_isWideScreen'),
-              _traitCard(),
+              TraitCard(),
               for (var index in model.modifiers.asMap().keys)
-                _modifierCard(model, index),
-              // _addModifierButton(model, context),
+                ModifierCard(index),
             ],
           ),
         ),
@@ -71,18 +70,5 @@ class _AbilityPanelState extends State<AbilityPanel> {
         icon: Icon(Icons.add),
       ),
     );
-  }
-
-  Widget _traitCard() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TraitCard(),
-    );
-  }
-
-  Widget _modifierCard(TraitModel trait, int index) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ModifierCard(index));
   }
 }
