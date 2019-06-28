@@ -40,8 +40,8 @@ class ModifierCard extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: modifierNameTextField(model, trait),
-        ),
+            child: ModifierNameTextField(
+                modifier: model, trait: trait, index: index)),
         Container(
           margin: EdgeInsets.only(left: 16.0),
           width: 100.0,
@@ -63,13 +63,6 @@ class ModifierCard extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  ModifierNameTextField modifierNameTextField(
-      Modifier model, TraitModel trait) {
-    print(
-        'new ModifierNameTextField(modifier: $model, trait: $trait, index: $index, model.name = ${model.name})');
-    return ModifierNameTextField(modifier: model, trait: trait, index: index);
   }
 
   Row _titleRow(BuildContext context) {
