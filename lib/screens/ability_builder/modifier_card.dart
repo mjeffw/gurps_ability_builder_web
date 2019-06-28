@@ -126,13 +126,11 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
 
   _ModifierNameTextFieldState(String name)
       : controller = TextEditingController(text: name) {
-    print('new _ModifierNameTextFieldState(name: $name');
     print('${controller.hashCode}');
   }
 
   @override
   void didUpdateWidget(ModifierNameTextField oldWidget) {
-    print('_ModifierNameTextFieldState.didUpdateWidget');
     super.didUpdateWidget(oldWidget);
     controller.text = widget.modifier.name;
   }
@@ -141,19 +139,21 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
   Widget build(BuildContext context) {
     return TypeAheadField<String>(
       textFieldConfiguration: TextFieldConfiguration(
-        autofocus: true,
-        controller: controller,
-        decoration: const InputDecoration(
-          labelText: 'Modifier Name',
-          filled: true,
-        ),
-        onEditingComplete: () {
-          _updateModifier();
-        },
-        onSubmitted: (text) {
-          _updateModifier();
-        },
-      ),
+          autofocus: true,
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: 'Modifier Name',
+            filled: true,
+          ),
+          onEditingComplete: () {
+            _updateModifier();
+          },
+          onSubmitted: (text) {
+            _updateModifier();
+          },
+          onChanged: (text) {
+            _updateModifier();
+          }),
       suggestionsCallback: (pattern) async {
         return await _suggestionsCallback(pattern);
       },
