@@ -35,7 +35,7 @@ class TraitModel extends Trait {
         modifiers: _addModifierTo(model.modifiers, SimpleModifier(name: '')));
   }
 
-  factory TraitModel.updateModifier(TraitModel model,
+  factory TraitModel.replaceModifier(TraitModel model,
       {int index, Modifier modifier}) {
     var list = List<Modifier>.of(model.modifiers);
     list[index] = modifier;
@@ -88,18 +88,6 @@ class TraitModel extends Trait {
         context.inheritFromWidgetOfExactType(_TraitModelBindingScope);
     scope.modelBindingState.updateModel(newModel);
   }
-
-  // ModifierModel modifierModel(int index) {
-  //   return ModifierModel(
-  //     name: '',
-  //     isAttackModifier: false,
-  //     percentage: 0,
-  //     index: index,
-  //     onUpdate: (m) {
-  //       TraitModel.updateModifier(this, index: index, modifier: m);
-  //     },
-  //   );
-  // }
 }
 
 List<Modifier> _addModifierTo(List<Modifier> list, Modifier mod) {
