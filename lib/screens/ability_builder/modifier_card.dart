@@ -40,7 +40,7 @@ class ModifierCard extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: _nameField(model, context, trait),
+          child: modifierNameTextField(model, trait),
         ),
         Container(
           margin: EdgeInsets.only(left: 16.0),
@@ -65,68 +65,11 @@ class ModifierCard extends StatelessWidget {
     );
   }
 
-  Widget _nameField(Modifier model, BuildContext context, TraitModel trait) {
-    // return AutoCompleteTextView(
-    //   tfTextDecoration: const InputDecoration(
-    //     labelText: 'Modifier Name',
-    //     filled: true,
-    //   ),
-    //   onValueChanged: (text) {
-    //     Modifier m = cloneModel(model, name: text);
-    //     TraitModel.update(context,
-    //         TraitModel.updateModifier(trait, index: index, modifier: m));
-    //   },
-    //   controller: TextEditingController(text: model.name),
-    //   getSuggestionsMethod: (pattern) {
-    //     print(pattern);
-    //     var all = modifiers.fetchEntries().where((it) {
-    //       var itLowerCase = it.key.toLowerCase();
-    //       print(itLowerCase);
-    //       return itLowerCase.startsWith(pattern.toString().toLowerCase());
-    //     });
-    //     var list = all.map((it) => it.key).toList();
-    //     print('matches: ${list.length}');
-    //     return list;
-    //   },
-    //   suggestionsApiFetchDelay: 500,
-    // );
-    return TypeAheadField<String>(
-      textFieldConfiguration: TextFieldConfiguration(
-          autofocus: true,
-          controller: TextEditingController(text: model.name),
-          decoration: const InputDecoration(
-            labelText: 'Modifier Name',
-            filled: true,
-          ),
-          onChanged: (text) {
-            Modifier m = cloneModel(model, name: text);
-            TraitModel.update(context,
-                TraitModel.updateModifier(trait, index: index, modifier: m));
-          }),
-      suggestionsCallback: (pattern) async {
-        return await _suggestionsCallback(pattern);
-      },
-      itemBuilder: (context, suggestion) {
-        print(suggestion);
-        return ListTile(title: Text(suggestion));
-      },
-      onSuggestionSelected: (suggestion) {
-        Modifier m = modifiers.fetch(suggestion);
-        TraitModel.update(context,
-            TraitModel.updateModifier(trait, index: index, modifier: m));
-      },
-    );
-  }
-
-  List<String> _suggestionsCallback(String pattern) {
-    print(pattern);
-    var fetchKeys = modifiers.fetchKeys();
-    print('total entries = ${fetchKeys.length}');
-    var list = fetchKeys.where((test) {
-      return test.toLowerCase().startsWith(pattern.toLowerCase());
-    }).toList();
-    print('potential matches = ${list.length}');
-    return list;
+  ModifierNameTextField modifierNameTextField(
+      Modifier model, TraitModel trait) {
+    print(
+        'new ModifierNameTextField(modifier: $model, trait: $trait, index: $index, model.name = ${model.name})');
+    return ModifierNameTextField(modifier: model, trait: trait, index: index);
   }
 
   Row _titleRow(BuildContext context) {
@@ -159,14 +102,99 @@ class ModifierCard extends StatelessWidget {
       ],
     );
   }
+}
 
-  Modifier cloneModel(Modifier model,
-      {String name, bool isAttackModifier, int percentage}) {
-    Modifier m;
-    if (model is SimpleModifier) {
-      return SimpleModifier.copyOf(model,
-          value: percentage, name: name, isAttackModifier: isAttackModifier);
-    }
-    return m;
+class ModifierNameTextField extends StatefulWidget {
+  ModifierNameTextField({
+    Key key,
+    @required this.index,
+    @required this.trait,
+    @required this.modifier,
+  }) : super(key: key);
+
+  final TraitModel trait;
+  final Modifier modifier;
+  final int index;
+
+  @override
+  _ModifierNameTextFieldState createState() =>
+      _ModifierNameTextFieldState(modifier.name);
+}
+
+class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
+  TextEditingController controller;
+
+  _ModifierNameTextFieldState(String name)
+      : controller = TextEditingController(text: name) {
+    print('new _ModifierNameTextFieldState(name: $name');
+    print('${controller.hashCode}');
   }
+
+  @override
+  void didUpdateWidget(ModifierNameTextField oldWidget) {
+    print('_ModifierNameTextFieldState.didUpdateWidget');
+    super.didUpdateWidget(oldWidget);
+    controller.text = widget.modifier.name;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TypeAheadField<String>(
+      textFieldConfiguration: TextFieldConfiguration(
+        autofocus: true,
+        controller: controller,
+        decoration: const InputDecoration(
+          labelText: 'Modifier Name',
+          filled: true,
+        ),
+        onEditingComplete: () {
+          _updateModifier();
+        },
+        onSubmitted: (text) {
+          _updateModifier();
+        },
+      ),
+      suggestionsCallback: (pattern) async {
+        return await _suggestionsCallback(pattern);
+      },
+      itemBuilder: (context, suggestion) {
+        print(suggestion);
+        return ListTile(title: Text(suggestion));
+      },
+      onSuggestionSelected: (suggestion) {
+        Modifier m = modifiers.fetch(suggestion);
+        TraitModel.update(
+            context,
+            TraitModel.updateModifier(widget.trait,
+                index: widget.index, modifier: m));
+      },
+    );
+  }
+
+  void _updateModifier() {
+    print('updateModifier');
+    Modifier m = cloneModel(widget.modifier, name: controller.text);
+    TraitModel.update(
+        context,
+        TraitModel.updateModifier(widget.trait,
+            index: widget.index, modifier: m));
+  }
+
+  List<String> _suggestionsCallback(String pattern) {
+    var fetchKeys = modifiers.fetchKeys();
+    var list = fetchKeys.where((test) {
+      return test.toLowerCase().startsWith(pattern.toLowerCase());
+    }).toList();
+    return list;
+  }
+}
+
+Modifier cloneModel(Modifier model,
+    {String name, bool isAttackModifier, int percentage}) {
+  Modifier m;
+  if (model is SimpleModifier) {
+    return SimpleModifier.copyOf(model,
+        value: percentage, name: name, isAttackModifier: isAttackModifier);
+  }
+  return m;
 }

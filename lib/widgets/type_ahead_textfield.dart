@@ -1002,7 +1002,6 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
     }
 
     this._controllerListener = () {
-      print('_controllerListener');
       // If we came here because of a change in selected text, not because of
       // actual change in text
 //      if (widget.controller.text == this._lastTextValue) return;
@@ -1029,8 +1028,6 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
   }
 
   Future<void> _getSuggestions() async {
-    print("_getSuggestions mounted = $mounted");
-
     if (mounted) {
       setState(() {
         this._animationController.forward(from: 1.0);
@@ -1073,7 +1070,6 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
 
   @override
   void dispose() {
-    print('_SuggestionsListState.dispose');
     _animationController.dispose();
     super.dispose();
     widget.controller.removeListener(this._controllerListener);
