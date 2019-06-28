@@ -90,7 +90,7 @@ class ModifierCard extends StatelessWidget {
     //   },
     //   suggestionsApiFetchDelay: 500,
     // );
-    return TypeAheadField<MapEntry<String, ModifierFactory>>(
+    return TypeAheadField<String>(
       textFieldConfiguration: TextFieldConfiguration(
           autofocus: true,
           controller: TextEditingController(text: model.name),
@@ -108,20 +108,22 @@ class ModifierCard extends StatelessWidget {
       },
       itemBuilder: (context, suggestion) {
         print(suggestion);
-        return ListTile(title: Text(suggestion.key));
+        return ListTile(title: Text(suggestion));
       },
       onSuggestionSelected: (suggestion) {
-        // TODO modify Modifier to match
+        Modifier m = modifiers.fetch(suggestion);
+        TraitModel.update(context,
+            TraitModel.updateModifier(trait, index: index, modifier: m));
       },
     );
   }
 
-  List<MapEntry<String, ModifierFactory>> _suggestionsCallback(String pattern) {
+  List<String> _suggestionsCallback(String pattern) {
     print(pattern);
-    var fetchEntries = modifiers.fetchEntries();
-    print('total entries = ${fetchEntries.length}');
-    var list = fetchEntries.where((test) {
-      return test.key.toLowerCase().startsWith(pattern.toLowerCase());
+    var fetchKeys = modifiers.fetchKeys();
+    print('total entries = ${fetchKeys.length}');
+    var list = fetchKeys.where((test) {
+      return test.toLowerCase().startsWith(pattern.toLowerCase());
     }).toList();
     print('potential matches = ${list.length}');
     return list;
@@ -133,6 +135,19 @@ class ModifierCard extends StatelessWidget {
 
     return Row(
       children: <Widget>[
+        Text(
+          '${model.name.isEmpty ? "Modifier " : ""}${model.name} (${model.percentage}%)',
+          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Visibility(
+              visible: model.isAttackModifier,
+              child: Icon(GurpsIcons.gun),
+            ),
+          ),
+        ),
         IconButton(
           alignment: Alignment.centerLeft,
           icon: Icon(Icons.cancel, color: Colors.red),
@@ -141,19 +156,6 @@ class ModifierCard extends StatelessWidget {
                 context, TraitModel.removeModifier(trait, index: index));
           },
         ),
-        Text(
-          '${model.name.isEmpty ? "Modifier: " : ""}${model.name} (${model.percentage})',
-          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-        ),
-        Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Visibility(
-              visible: model.isAttackModifier,
-              child: Icon(GurpsIcons.gun),
-            ),
-          ),
-        )
       ],
     );
   }
