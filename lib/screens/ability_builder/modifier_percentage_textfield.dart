@@ -1,4 +1,3 @@
-import 'package:flutter_web/gestures.dart';
 import 'package:flutter_web/material.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
@@ -39,6 +38,12 @@ class _ModifierPercentageTextFieldState
     super.initState();
   }
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   void _signedIntegerListener() {
     var digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -69,6 +74,12 @@ class _ModifierPercentageTextFieldState
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onEditingComplete: () {
+        print('onEditingComplete');
+      },
+      onSubmitted: (text) {
+        print('onSubmittedComplete($text)');
+      },
       onChanged: (text) {
         print(text);
         var value = int.tryParse(text) ?? modifier.percentage;

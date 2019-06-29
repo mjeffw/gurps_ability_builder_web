@@ -42,7 +42,6 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
 
   @override
   Widget build(BuildContext context) {
-    print('_modifierNameTextFieldState.build');
     return TypeAheadField<String>(
       textFieldConfiguration: TextFieldConfiguration(
         autofocus: true,

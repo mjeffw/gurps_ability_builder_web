@@ -71,18 +71,31 @@ class ModifierCard extends StatelessWidget {
     final TraitModel trait = TraitModel.of(context);
     final Modifier model = trait.modifiers[index];
 
-    return Row(
-      children: <Widget>[
-        Expanded(
-            child: ModifierNameTextField(
-                modifier: model, trait: trait, index: index)),
-        Container(
-          margin: EdgeInsets.only(left: 16.0),
-          width: 100.0,
-          child: ModifierPercentageTextField(
-              model: model, trait: trait, index: index),
-        ),
-      ],
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      onKey: (RawKeyEvent value) {
+        if (value.data is RawKeyEventDataAndroid) {
+          var d = value.data as RawKeyEventDataAndroid;
+          print('${d}');
+          if (d.keyCode == 9) // TAB key
+          {
+            // switch focus
+          }
+        }
+      },
+      child: Row(
+        children: <Widget>[
+          Expanded(
+              child: ModifierNameTextField(
+                  modifier: model, trait: trait, index: index)),
+          Container(
+            margin: EdgeInsets.only(left: 16.0),
+            width: 100.0,
+            child: ModifierPercentageTextField(
+                model: model, trait: trait, index: index),
+          ),
+        ],
+      ),
     );
   }
 }
