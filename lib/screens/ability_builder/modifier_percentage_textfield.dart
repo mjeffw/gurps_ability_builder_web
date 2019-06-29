@@ -1,3 +1,4 @@
+import 'package:flutter_web/gestures.dart';
 import 'package:flutter_web/material.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
@@ -34,29 +35,26 @@ class _ModifierPercentageTextFieldState
 
   @override
   initState() {
-    controller.addListener(() {
-      var digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    controller.addListener(_signedIntegerListener);
+    super.initState();
+  }
 
-      String text = '';
-      for (var i = 0; i < controller.text.length; i++) {
-        var ch = controller.text[i];
-        if (i == 0 && (ch == '+' || ch == '-')) {
-          text += ch;
-        }
+  void _signedIntegerListener() {
+    var digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-        if (digits.contains(ch)) {
-          text += ch;
-        }
+    String text = '';
+    for (var i = 0; i < controller.text.length; i++) {
+      var ch = controller.text[i];
+      if (i == 0 && (ch == '+' || ch == '-')) {
+        text += ch;
       }
 
-      controller.value = controller.value.copyWith(
-        text: text,
-        // selection:
-        //     TextSelection(baseOffset: text.length, extentOffset: text.length),
-        // composing: TextRange.empty,
-      );
-    });
-    super.initState();
+      if (digits.contains(ch)) {
+        text += ch;
+      }
+    }
+
+    controller.value = controller.value.copyWith(text: text);
   }
 
   @override
@@ -82,7 +80,7 @@ class _ModifierPercentageTextFieldState
       inputFormatters: [
         WhitelistingTextInputFormatter(RegExp(r'[-+]|\d*|[-+]?\d+'))
       ],
-      //keyboardType: TextInputType.numberWithOptions(signed: true),
+      keyboardType: TextInputType.numberWithOptions(signed: true),
       decoration: const InputDecoration(
         labelText: 'Value',
         filled: true,
