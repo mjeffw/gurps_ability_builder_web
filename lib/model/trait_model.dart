@@ -145,3 +145,9 @@ class _TraitModelBindingState extends State<TraitModelBinding> {
     );
   }
 }
+
+Modifier cloneModel(Modifier model,
+    {String name, bool isAttackModifier, int percentage}) {
+  return SimpleModifier.copyOf(model,
+      value: percentage, name: name, isAttackModifier: isAttackModifier);
+}

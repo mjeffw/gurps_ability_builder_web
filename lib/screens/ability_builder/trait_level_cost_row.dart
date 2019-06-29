@@ -33,8 +33,8 @@ class TraitLevelCostRow extends StatelessWidget {
             child: TextField(
               textAlign: TextAlign.right,
               inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(labelText: 'Levels', filled: true),
               keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Levels', filled: true),
               controller: TextEditingController(
                 text: model.numberOfLevels.toString(),
               ),

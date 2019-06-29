@@ -23,6 +23,7 @@ class ModifierNameTextField extends StatefulWidget {
 
 class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
   final TextEditingController controller;
+
   TraitModel trait;
   Modifier modifier;
   int index;
@@ -83,10 +84,4 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
       return test.toLowerCase().startsWith(pattern.toLowerCase());
     }).toList();
   }
-}
-
-Modifier cloneModel(Modifier model,
-    {String name, bool isAttackModifier, int percentage}) {
-  return SimpleModifier(
-      percentage: percentage, name: name, isAttackModifier: isAttackModifier);
 }

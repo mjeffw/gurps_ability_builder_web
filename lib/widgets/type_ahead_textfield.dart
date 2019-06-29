@@ -668,26 +668,26 @@ class TypeAheadField<T> extends StatefulWidget {
       @required this.suggestionsCallback,
       @required this.itemBuilder,
       @required this.onSuggestionSelected,
-      this.textFieldConfiguration: const TextFieldConfiguration(),
-      this.suggestionsBoxDecoration: const SuggestionsBoxDecoration(),
-      this.debounceDuration: const Duration(milliseconds: 300),
+      this.textFieldConfiguration = const TextFieldConfiguration(),
+      this.suggestionsBoxDecoration = const SuggestionsBoxDecoration(),
+      this.debounceDuration = const Duration(milliseconds: 300),
       this.suggestionsBoxController,
       this.loadingBuilder,
       this.noItemsFoundBuilder,
       this.errorBuilder,
       this.transitionBuilder,
-      this.animationStart: 0.25,
-      this.animationDuration: const Duration(milliseconds: 500),
-      this.getImmediateSuggestions: false,
-      this.suggestionsBoxVerticalOffset: 5.0,
-      this.direction: AxisDirection.down,
-      this.hideOnLoading: false,
-      this.hideOnEmpty: false,
-      this.hideOnError: false,
-      this.hideSuggestionsOnKeyboardHide: true,
-      this.keepSuggestionsOnLoading: true,
-      this.keepSuggestionsOnSuggestionSelected: false,
-      this.autoFlipDirection: false})
+      this.animationStart = 0.25,
+      this.animationDuration = const Duration(milliseconds: 500),
+      this.getImmediateSuggestions = false,
+      this.suggestionsBoxVerticalOffset = 5.0,
+      this.direction = AxisDirection.down,
+      this.hideOnLoading = false,
+      this.hideOnEmpty = false,
+      this.hideOnError = false,
+      this.hideSuggestionsOnKeyboardHide = true,
+      this.keepSuggestionsOnLoading = true,
+      this.keepSuggestionsOnSuggestionSelected = false,
+      this.autoFlipDirection = false})
       : assert(suggestionsCallback != null),
         assert(itemBuilder != null),
         assert(onSuggestionSelected != null),
@@ -950,7 +950,7 @@ class _SuggestionsList<T> extends StatefulWidget {
   _SuggestionsList({
     @required this.suggestionsBox,
     this.controller,
-    this.getImmediateSuggestions: false,
+    this.getImmediateSuggestions = false,
     this.onSuggestionSelected,
     this.suggestionsCallback,
     this.itemBuilder,
@@ -1004,7 +1004,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
     this._controllerListener = () {
       // If we came here because of a change in selected text, not because of
       // actual change in text
-//      if (widget.controller.text == this._lastTextValue) return;
+      if (widget.controller.text == this._lastTextValue) return;
 
       this._lastTextValue = widget.controller.text;
 
@@ -1077,8 +1077,9 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
 
   @override
   Widget build(BuildContext context) {
-    if (this._suggestions == null && this._isLoading == false)
+    if (this._suggestions == null && this._isLoading == false) {
       return Container();
+    }
 
     Widget child;
     if (this._isLoading) {
@@ -1093,7 +1094,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
       } else {
         child = createErrorWidget();
       }
-    } else if (this._suggestions.length == 0) {
+    } else if (this._suggestions.isEmpty) {
       if (widget.hideOnEmpty) {
         child = Container(height: 0);
       } else {
@@ -1254,12 +1255,12 @@ class SuggestionsBoxDecoration {
 
   /// Creates a SuggestionsBoxDecoration
   const SuggestionsBoxDecoration(
-      {this.elevation: 4.0,
+      {this.elevation = 4.0,
       this.color,
       this.shape,
-      this.hasScrollbar: true,
+      this.hasScrollbar = true,
       this.borderRadius,
-      this.shadowColor: const Color(0xFF000000),
+      this.shadowColor = const Color(0xFF000000),
       this.constraints})
       : assert(shadowColor != null),
         assert(elevation != null);
@@ -1416,31 +1417,31 @@ class TextFieldConfiguration<T> {
 
   /// Creates a TextFieldConfiguration
   const TextFieldConfiguration(
-      {this.decoration: const InputDecoration(),
+      {this.decoration = const InputDecoration(),
       this.style,
       this.controller,
       this.onChanged,
       this.onSubmitted,
-      this.obscureText: false,
-      this.maxLengthEnforced: true,
+      this.obscureText = false,
+      this.maxLengthEnforced = true,
       this.maxLength,
-      this.maxLines: 1,
-      this.autocorrect: true,
+      this.maxLines = 1,
+      this.autocorrect = true,
       this.inputFormatters,
-      this.autofocus: false,
-      this.keyboardType: TextInputType.text,
-      this.enabled: true,
-      this.textAlign: TextAlign.start,
+      this.autofocus = false,
+      this.keyboardType = TextInputType.text,
+      this.enabled = true,
+      this.textAlign = TextAlign.start,
       this.focusNode,
       this.cursorColor,
       this.cursorRadius,
       this.textInputAction,
-      this.textCapitalization: TextCapitalization.none,
-      this.cursorWidth: 2.0,
+      this.textCapitalization = TextCapitalization.none,
+      this.cursorWidth = 2.0,
       this.keyboardAppearance,
       this.onEditingComplete,
       this.textDirection,
-      this.scrollPadding: const EdgeInsets.all(20.0)});
+      this.scrollPadding = const EdgeInsets.all(20.0)});
 
   /// Copies the [TextFieldConfiguration] and only changes the specified
   /// properties

@@ -8,6 +8,7 @@ import '../../model/trait_model.dart';
 import '../../widgets/common.dart';
 import '../../widgets/gurps_icons.dart';
 import 'modifier_name_textfield.dart';
+import 'modifier_percentage_textfield.dart';
 
 var titleStyle = TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold);
 
@@ -78,21 +79,8 @@ class ModifierCard extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(left: 16.0),
           width: 100.0,
-          child: TextField(
-            onChanged: (text) {
-              Modifier m = cloneModel(model, percentage: int.parse(text));
-              TraitModel.update(context,
-                  TraitModel.replaceModifier(trait, index: index, modifier: m));
-            },
-            textAlign: TextAlign.right,
-            decoration: const InputDecoration(
-              labelText: 'Value',
-              filled: true,
-              suffix: Text('%'),
-            ),
-            controller:
-                TextEditingController(text: model.percentage.toString()),
-          ),
+          child: ModifierPercentageTextField(
+              model: model, trait: trait, index: index),
         ),
       ],
     );

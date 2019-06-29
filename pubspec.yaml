@@ -10,6 +10,8 @@ dependencies:
   flutter_web_ui: any
   protobuf: ^0.13.11
   rxdart: ^0.22.0
+  #-- enable if flutter_web works with other flutter plugins and remove lib/widgets/type_ahead_textfield.dart
+  # flutter_typeahead: ^1.6.1 
   gurps_modifiers:
     git: 
       url: https://github.com/mjeffw/gurps_modifiers
