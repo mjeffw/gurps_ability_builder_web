@@ -3,8 +3,8 @@ import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 import '../../model/trait_model.dart';
 
-class ModifierPercentageTextField extends StatefulWidget {
-  const ModifierPercentageTextField({
+class ModifierLevelTextField extends StatefulWidget {
+  const ModifierLevelTextField({
     Key key,
     @required this.model,
     @required this.trait,
@@ -16,21 +16,19 @@ class ModifierPercentageTextField extends StatefulWidget {
   final int index;
 
   @override
-  _ModifierPercentageTextFieldState createState() =>
-      _ModifierPercentageTextFieldState(trait, model, index);
+  _ModifierLevelTextFieldState createState() =>
+      _ModifierLevelTextFieldState(trait, model, index);
 }
 
-class _ModifierPercentageTextFieldState
-    extends State<ModifierPercentageTextField> {
+class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
   final TextEditingController controller;
 
   TraitModel trait;
-  Modifier modifier;
+  LeveledModifier modifier;
   int index;
 
-  _ModifierPercentageTextFieldState(this.trait, this.modifier, this.index)
-      : controller =
-            TextEditingController(text: modifier.percentage.toString());
+  _ModifierLevelTextFieldState(this.trait, this.modifier, this.index)
+      : controller = TextEditingController(text: modifier.level.toString());
 
   @override
   initState() {
@@ -63,27 +61,21 @@ class _ModifierPercentageTextFieldState
   }
 
   @override
-  void didUpdateWidget(ModifierPercentageTextField oldWidget) {
+  void didUpdateWidget(ModifierLevelTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
     controller.text = widget.model.percentage.toString();
     trait = widget.trait;
-    modifier = widget.model;
+    modifier = widget.model as LeveledModifier;
     index = widget.index;
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onEditingComplete: () {
-        print('onEditingComplete');
-      },
-      onSubmitted: (text) {
-        print('onSubmittedComplete($text)');
-      },
       onChanged: (text) {
         print(text);
-        var value = int.tryParse(text) ?? modifier.percentage;
-        Modifier m = cloneSimpleModifier(modifier, percentage: value);
+        var value = int.tryParse(text) ?? modifier.level;
+        Modifier m = cloneLeveledModifier(modifier, level: value);
         TraitModel.update(context,
             TraitModel.replaceModifier(trait, index: index, modifier: m));
       },
@@ -93,9 +85,8 @@ class _ModifierPercentageTextFieldState
       ],
       keyboardType: TextInputType.numberWithOptions(signed: true),
       decoration: const InputDecoration(
-        labelText: 'Value',
+        labelText: 'Level',
         filled: true,
-        suffix: Text('%'),
       ),
       controller: controller,
     );

@@ -64,7 +64,7 @@ class _AbilityPanelState extends State<AbilityPanel> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           TraitModel.update(
-              context, TraitModel.addModifier(model, SimpleModifier(name: '')));
+              context, TraitModel.addModifier(model, BlankModifier()));
         },
         label: Text('Add Modifier'),
         icon: Icon(Icons.add),

@@ -146,8 +146,28 @@ class _TraitModelBindingState extends State<TraitModelBinding> {
   }
 }
 
-Modifier cloneModel(Modifier model,
+class BlankModifier extends SimpleModifier {
+  BlankModifier() : super(name: '', percentage: 0, isAttackModifier: false);
+}
+
+SimpleModifier cloneSimpleModifier(SimpleModifier model,
     {String name, bool isAttackModifier, int percentage}) {
   return SimpleModifier.copyOf(model,
       value: percentage, name: name, isAttackModifier: isAttackModifier);
+}
+
+LeveledModifier cloneLeveledModifier(LeveledModifier model,
+    {String name,
+    bool isAttackModifier,
+    int level,
+    int baseValue,
+    int maxLevel,
+    int valuePerLevel}) {
+  return LeveledModifier.copyOf(model,
+      baseValue: baseValue,
+      level: level,
+      maxLevel: maxLevel,
+      valuePerLevel: valuePerLevel,
+      name: name,
+      isAttackModifier: isAttackModifier);
 }
