@@ -42,10 +42,13 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
 
   @override
   Widget build(BuildContext context) {
+    bool editable = modifier is SimpleDialog || modifier is BlankModifier;
+
     return TypeAheadField<String>(
       textFieldConfiguration: TextFieldConfiguration(
-        autofocus: true,
+        autofocus: editable,
         controller: controller,
+        enabled: editable,
         decoration: const InputDecoration(
           labelText: 'Modifier Name',
           filled: true,

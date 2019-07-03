@@ -24,30 +24,38 @@ class ModifierCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Spacer(),
-              InkWell(
-                child: Icon(Icons.clear, color: Colors.grey),
-                onTap: () {
-                  TraitModel.update(
-                    context,
-                    TraitModel.removeModifier(trait, index: index),
-                  );
-                },
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _titleRow(context),
-                _contents(context, index),
-              ],
-            ),
-          ),
+          _closeIcon(context, trait),
+          _buildContent(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _closeIcon(BuildContext context, TraitModel trait) {
+    return Row(
+      children: <Widget>[
+        Spacer(),
+        InkWell(
+          child: Icon(Icons.clear, color: Colors.grey),
+          onTap: () {
+            TraitModel.update(
+              context,
+              TraitModel.removeModifier(trait, index: index),
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _titleRow(context),
+          _contents(context, index),
         ],
       ),
     );
