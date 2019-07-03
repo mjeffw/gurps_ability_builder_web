@@ -29,11 +29,30 @@ class LeveledModifierPanel extends StatelessWidget {
                 child: ModifierNameTextField(
                     modifier: modifier, trait: trait, index: index)),
             Container(
-              margin: EdgeInsets.only(left: 16.0),
+              margin: EdgeInsets.only(left: 8.0),
               width: 100.0,
               child: ModifierLevelTextField(
                   model: modifier, trait: trait, index: index),
             ),
+            Container(
+              margin: EdgeInsets.only(left: 8.0),
+              child: InkWell(
+                child: Icon(
+                  Icons.cancel,
+                  color: Colors.blueAccent,
+                ),
+                onTap: () {
+                  TraitModel.update(
+                    context,
+                    TraitModel.replaceModifier(
+                      trait,
+                      index: index,
+                      modifier: BlankModifier(),
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         ),
       ],

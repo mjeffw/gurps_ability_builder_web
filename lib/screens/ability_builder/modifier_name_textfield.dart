@@ -49,7 +49,7 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
         autofocus: editable,
         controller: controller,
         enabled: editable,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Modifier Name',
           filled: true,
         ),

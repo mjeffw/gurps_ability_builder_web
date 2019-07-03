@@ -2,7 +2,7 @@ import 'package:flutter_web/material.dart';
 
 import '../../model/trait_model.dart';
 import '../../widgets/common.dart';
-import 'trait_level_cost_row.dart';
+//import 'trait_level_cost_row.dart';
 import 'trait_name_row.dart';
 
 class TraitCard extends StatelessWidget {
@@ -25,7 +25,7 @@ class TraitCard extends StatelessWidget {
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
             buildContainer(TraitNameRow()),
-            buildContainer(TraitLevelCostRow()),
+            // buildContainer(TraitLevelCostRow()),
           ],
         ),
       ),

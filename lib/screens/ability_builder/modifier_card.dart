@@ -11,7 +11,7 @@ import 'leveled_modifier_panel.dart';
 import 'simple_modifier_panel.dart';
 import 'variable_modifier_panel.dart';
 
-var titleStyle = TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold);
+var titleStyle = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
 
 class ModifierCard extends StatelessWidget {
   final int index;
@@ -36,7 +36,10 @@ class ModifierCard extends StatelessWidget {
       children: <Widget>[
         Spacer(),
         InkWell(
-          child: Icon(Icons.clear, color: Colors.grey),
+          child: Icon(
+            Icons.clear,
+            color: Colors.blueAccent,
+          ),
           onTap: () {
             TraitModel.update(
               context,
@@ -67,12 +70,12 @@ class ModifierCard extends StatelessWidget {
     final title = model.name.isEmpty ? 'Modifier ' : '';
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Flexible(
+        Expanded(
           child: Padding(
             child: Text(
-              '$title${model.name}',
+              '$title${model.canonicalName}',
               style: titleStyle,
               maxLines: 2,
             ),
@@ -82,11 +85,14 @@ class ModifierCard extends StatelessWidget {
         Visibility(
           visible: model.isAttackModifier,
           child: Padding(
-              child: Icon(GurpsIcons.gun),
-              padding: EdgeInsets.only(right: 8.0)),
+              child: Icon(
+                GurpsIcons.gun,
+                color: Colors.grey,
+              ),
+              padding: EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 0.0)),
         ),
         Text(
-          '(${model.percentage}%)',
+          '${!model.percentage.isNegative ? "+" : ""}${model.percentage}%',
           style: titleStyle,
         ),
       ],
