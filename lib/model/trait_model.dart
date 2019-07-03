@@ -30,9 +30,9 @@ class TraitModel extends Trait {
         modifiers: modifiers ?? original.modifiers);
   }
 
-  factory TraitModel.addModifier(TraitModel model, Modifier modifier) {
+  factory TraitModel.addModifier(TraitModel model) {
     return TraitModel.copyOf(model,
-        modifiers: _addModifierTo(model.modifiers, SimpleModifier(name: '')));
+        modifiers: _addModifierTo(model.modifiers, BlankModifier()));
   }
 
   factory TraitModel.replaceModifier(TraitModel model,
@@ -147,7 +147,11 @@ class _TraitModelBindingState extends State<TraitModelBinding> {
 }
 
 class BlankModifier extends SimpleModifier {
-  BlankModifier() : super(name: '', percentage: 0, isAttackModifier: false);
+  BlankModifier({bool isAttackModifier, String name, int percentage})
+      : super(
+            name: name ?? '',
+            percentage: percentage ?? 0,
+            isAttackModifier: isAttackModifier ?? false);
 }
 
 SimpleModifier cloneSimpleModifier(SimpleModifier model,

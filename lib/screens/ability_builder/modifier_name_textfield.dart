@@ -70,7 +70,7 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
   }
 
   void _updateModifier(String text) {
-    Modifier m = SimpleModifier(
+    Modifier m = BlankModifier(
         isAttackModifier: modifier.isAttackModifier,
         name: text,
         percentage: modifier.percentage);

@@ -83,7 +83,10 @@ class _ModifierPercentageTextFieldState
       onChanged: (text) {
         print(text);
         var value = int.tryParse(text) ?? modifier.percentage;
-        Modifier m = cloneSimpleModifier(modifier, percentage: value);
+        Modifier m = BlankModifier(
+            name: modifier.name,
+            percentage: value,
+            isAttackModifier: modifier.isAttackModifier);
         TraitModel.update(context,
             TraitModel.replaceModifier(trait, index: index, modifier: m));
       },

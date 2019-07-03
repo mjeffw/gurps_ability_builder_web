@@ -728,7 +728,7 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
 
   // Keyboard detection
   KeyboardVisibilityNotification _keyboardVisibility =
-      new KeyboardVisibilityNotification();
+      KeyboardVisibilityNotification();
 
   int _keyboardVisibilityId;
 

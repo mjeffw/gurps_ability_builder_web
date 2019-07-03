@@ -20,17 +20,17 @@ class GurpsIcons {
 
   static const _kFontFam = 'GurpsIcons';
 
-  static const IconData gun = const IconData(0xe800, fontFamily: _kFontFam);
+  static const IconData gun = IconData(0xe800, fontFamily: _kFontFam);
   static const IconData long_branch_oss =
-      const IconData(0xe801, fontFamily: _kFontFam);
+      IconData(0xe801, fontFamily: _kFontFam);
   static const IconData noun_crawl_485414 =
-      const IconData(0xe802, fontFamily: _kFontFam);
+      IconData(0xe802, fontFamily: _kFontFam);
   static const IconData noun_dead_body_1161055 =
-      const IconData(0xe803, fontFamily: _kFontFam);
+      IconData(0xe803, fontFamily: _kFontFam);
   static const IconData noun_human_1307595 =
-      const IconData(0xe804, fontFamily: _kFontFam);
+      IconData(0xe804, fontFamily: _kFontFam);
   static const IconData noun_kneel_486922 =
-      const IconData(0xe805, fontFamily: _kFontFam);
+      IconData(0xe805, fontFamily: _kFontFam);
   static const IconData noun_sit_1506535 =
-      const IconData(0xe806, fontFamily: _kFontFam);
+      IconData(0xe806, fontFamily: _kFontFam);
 }

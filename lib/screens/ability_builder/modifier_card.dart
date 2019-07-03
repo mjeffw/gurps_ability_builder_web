@@ -13,8 +13,6 @@ import 'variable_modifier_panel.dart';
 
 var titleStyle = TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold);
 
-enum ModifierType { Simple, Leveled, Variable }
-
 class ModifierCard extends StatelessWidget {
   final int index;
 
@@ -22,16 +20,35 @@ class ModifierCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TraitModel trait = TraitModel.of(context);
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _titleRow(context),
-            _contents(context, index),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Spacer(),
+              InkWell(
+                child: Icon(Icons.clear, color: Colors.grey),
+                onTap: () {
+                  TraitModel.update(
+                    context,
+                    TraitModel.removeModifier(trait, index: index),
+                  );
+                },
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _titleRow(context),
+                _contents(context, index),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -42,26 +59,27 @@ class ModifierCard extends StatelessWidget {
     final title = model.name.isEmpty ? 'Modifier ' : '';
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Text('$title${model.name} (${model.percentage}%)', style: titleStyle),
-        Expanded(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Visibility(
-              visible: model.isAttackModifier,
-              child: Icon(GurpsIcons.gun),
+        Flexible(
+          child: Padding(
+            child: Text(
+              '$title${model.name}',
+              style: titleStyle,
+              maxLines: 2,
             ),
+            padding: EdgeInsets.only(right: 8.0),
           ),
         ),
-        IconButton(
-          alignment: Alignment.centerLeft,
-          icon: Icon(Icons.cancel, color: Colors.red),
-          onPressed: () {
-            TraitModel.update(
-              context,
-              TraitModel.removeModifier(trait, index: index),
-            );
-          },
+        Visibility(
+          visible: model.isAttackModifier,
+          child: Padding(
+              child: Icon(GurpsIcons.gun),
+              padding: EdgeInsets.only(right: 8.0)),
+        ),
+        Text(
+          '(${model.percentage}%)',
+          style: titleStyle,
         ),
       ],
     );
@@ -70,6 +88,7 @@ class ModifierCard extends StatelessWidget {
   Widget _contents(BuildContext context, int index) {
     final TraitModel trait = TraitModel.of(context);
     final Modifier model = trait.modifiers[index];
+
     if (model is BlankModifier) {
       return BlankModifierPanel(index: index);
     } else if (model is SimpleModifier) {
@@ -77,7 +96,6 @@ class ModifierCard extends StatelessWidget {
     } else if (model is LeveledModifier) {
       return LeveledModifierPanel(index: index);
     } else {
-      // model is VariableModifier
       return VariableModifierPanel(index: index);
     }
   }
