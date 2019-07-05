@@ -73,7 +73,10 @@ class _ModifierPercentageTextFieldState
 
   @override
   Widget build(BuildContext context) {
+    bool editable = modifier is BlankModifier;
+
     return TextField(
+      enabled: editable,
       onEditingComplete: () {
         print('onEditingComplete');
       },

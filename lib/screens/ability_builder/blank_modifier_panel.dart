@@ -1,4 +1,5 @@
 import 'package:flutter_web/material.dart';
+import 'package:gurps_ability_builder_web/widgets/clear_button.dart';
 
 import '../../model/trait_model.dart';
 import 'modifier_name_textfield.dart';
@@ -30,22 +31,7 @@ class BlankModifierPanel extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.only(left: 8.0),
-          child: InkWell(
-            child: Icon(
-              Icons.cancel,
-              color: Colors.blueAccent,
-            ),
-            onTap: () {
-              TraitModel.update(
-                context,
-                TraitModel.replaceModifier(
-                  trait,
-                  index: index,
-                  modifier: BlankModifier(),
-                ),
-              );
-            },
-          ),
+          child: ClearButton(trait: trait, index: index),
         )
       ],
     );
