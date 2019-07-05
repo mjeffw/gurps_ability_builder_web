@@ -38,7 +38,7 @@ class ModifierCard extends StatelessWidget {
         InkWell(
           child: Icon(
             Icons.clear,
-            color: Colors.blueAccent,
+            color: Colors.redAccent,
           ),
           onTap: () {
             TraitModel.update(

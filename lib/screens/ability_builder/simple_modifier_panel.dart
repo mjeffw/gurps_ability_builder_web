@@ -2,6 +2,8 @@ import 'package:flutter_web/material.dart';
 import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 import '../../model/trait_model.dart';
+import 'modifier_name_textfield.dart';
+import 'modifier_percentage_textfield.dart';
 
 class SimpleModifierPanel extends StatelessWidget {
   const SimpleModifierPanel({
@@ -18,17 +20,34 @@ class SimpleModifierPanel extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: Text(modifier.name),
-          // modifier: modifier, trait: trait, index: index),
+          child: ModifierNameTextField(
+              modifier: modifier, trait: trait, index: index),
         ),
         Container(
           margin: EdgeInsets.only(left: 16.0),
           width: 100.0,
-          child: Text(
-            '${modifier.percentage}%',
-            style: TextStyle(height: 2.0),
-          ),
+          child: ModifierPercentageTextField(
+              model: modifier, trait: trait, index: index),
         ),
+        Container(
+          margin: EdgeInsets.only(left: 8.0),
+          child: InkWell(
+            child: Icon(
+              Icons.cancel,
+              color: Colors.blueAccent,
+            ),
+            onTap: () {
+              TraitModel.update(
+                context,
+                TraitModel.replaceModifier(
+                  trait,
+                  index: index,
+                  modifier: BlankModifier(),
+                ),
+              );
+            },
+          ),
+        )
       ],
     );
   }

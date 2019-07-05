@@ -28,6 +28,25 @@ class BlankModifierPanel extends StatelessWidget {
           child: ModifierPercentageTextField(
               model: modifier, trait: trait, index: index),
         ),
+        Container(
+          margin: EdgeInsets.only(left: 8.0),
+          child: InkWell(
+            child: Icon(
+              Icons.cancel,
+              color: Colors.blueAccent,
+            ),
+            onTap: () {
+              TraitModel.update(
+                context,
+                TraitModel.replaceModifier(
+                  trait,
+                  index: index,
+                  modifier: BlankModifier(),
+                ),
+              );
+            },
+          ),
+        )
       ],
     );
   }
