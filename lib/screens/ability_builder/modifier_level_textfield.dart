@@ -63,10 +63,10 @@ class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
   @override
   void didUpdateWidget(ModifierLevelTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    controller.text = widget.model.percentage.toString();
-    trait = widget.trait;
     modifier = widget.model as LeveledModifier;
+    trait = widget.trait;
     index = widget.index;
+    controller.text = modifier.level.toString();
   }
 
   @override
