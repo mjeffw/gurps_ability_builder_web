@@ -9,39 +9,37 @@ class ModifierNameTextField extends StatefulWidget {
     Key key,
     @required this.index,
     @required this.trait,
-    @required this.modifier,
   }) : super(key: key);
 
   final TraitModel trait;
-  final Modifier modifier;
   final int index;
 
   @override
   _ModifierNameTextFieldState createState() =>
-      _ModifierNameTextFieldState(trait, modifier, index);
+      _ModifierNameTextFieldState(trait, index);
 }
 
 class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
   final TextEditingController controller;
 
   TraitModel trait;
-  Modifier modifier;
   int index;
 
-  _ModifierNameTextFieldState(this.trait, this.modifier, this.index)
-      : controller = TextEditingController(text: modifier.name);
+  _ModifierNameTextFieldState(this.trait, this.index)
+      : controller = TextEditingController(text: trait.modifiers[index].name);
 
   @override
   void didUpdateWidget(ModifierNameTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    controller.text = widget.modifier.name;
+
     trait = widget.trait;
-    modifier = widget.modifier;
     index = widget.index;
+    controller.text = trait.modifiers[index].name;
   }
 
   @override
   Widget build(BuildContext context) {
+    Modifier modifier = trait.modifiers[index];
     bool editable = modifier is BlankModifier;
 
     return TypeAheadField<String>(
@@ -54,7 +52,7 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
           filled: true,
         ),
         onChanged: (t) {
-          _updateModifier(t);
+          _updateModifier(modifier, t);
         },
       ),
       hideOnEmpty: true,
@@ -72,7 +70,7 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
     );
   }
 
-  void _updateModifier(String text) {
+  void _updateModifier(Modifier modifier, String text) {
     Modifier m = BlankModifier(
         isAttackModifier: modifier.isAttackModifier,
         name: text,

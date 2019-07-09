@@ -20,8 +20,7 @@ class BlankModifierPanel extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: ModifierNameTextField(
-              modifier: modifier, trait: trait, index: index),
+          child: ModifierNameTextField(trait: trait, index: index),
         ),
         Container(
           margin: EdgeInsets.only(left: 16.0),

@@ -6,29 +6,27 @@ import '../../model/trait_model.dart';
 class ModifierLevelTextField extends StatefulWidget {
   const ModifierLevelTextField({
     Key key,
-    @required this.model,
     @required this.trait,
     @required this.index,
   }) : super(key: key);
 
-  final Modifier model;
   final TraitModel trait;
   final int index;
 
   @override
   _ModifierLevelTextFieldState createState() =>
-      _ModifierLevelTextFieldState(trait, model, index);
+      _ModifierLevelTextFieldState(trait, index);
 }
 
 class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
   final TextEditingController controller;
 
   TraitModel trait;
-  LeveledModifier modifier;
   int index;
 
-  _ModifierLevelTextFieldState(this.trait, this.modifier, this.index)
-      : controller = TextEditingController(text: modifier.level.toString());
+  _ModifierLevelTextFieldState(this.trait, this.index)
+      : controller = TextEditingController(
+            text: (trait.modifiers[index] as LeveledModifier).level.toString());
 
   @override
   initState() {
@@ -63,14 +61,16 @@ class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
   @override
   void didUpdateWidget(ModifierLevelTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    modifier = widget.model as LeveledModifier;
     trait = widget.trait;
     index = widget.index;
-    controller.text = modifier.level.toString();
+    controller.text =
+        (trait.modifiers[index] as LeveledModifier).level.toString();
   }
 
   @override
   Widget build(BuildContext context) {
+    LeveledModifier modifier = trait.modifiers[index] as LeveledModifier;
+
     return TextField(
       onChanged: (text) {
         print(text);
