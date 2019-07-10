@@ -27,7 +27,7 @@ class LeveledModifierPanel extends StatelessWidget {
             Expanded(child: ModifierNameTextField(trait: trait, index: index)),
             Container(
               margin: EdgeInsets.only(left: 8.0),
-              width: 100.0,
+              width: 250.0,
               child: ModifierLevelTextField(trait: trait, index: index),
             ),
             Container(

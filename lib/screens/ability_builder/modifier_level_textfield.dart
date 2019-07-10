@@ -3,6 +3,9 @@ import 'package:gurps_modifiers/gurps_modifiers.dart';
 
 import '../../model/trait_model.dart';
 
+typedef int ModifyLevel(int level);
+typedef bool Predicate();
+
 class ModifierLevelTextField extends StatefulWidget {
   const ModifierLevelTextField({
     Key key,
@@ -74,21 +77,57 @@ class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
     return TextField(
       onChanged: (text) {
         print(text);
-        var value = int.tryParse(text) ?? modifier.level;
-        Modifier m = cloneLeveledModifier(modifier, level: value);
-        TraitModel.update(context,
-            TraitModel.replaceModifier(trait, index: index, modifier: m));
+        int value = int.tryParse(text) ?? modifier.level;
+        _updateLevel(modifier, (x) => value, context);
       },
       textAlign: TextAlign.right,
       inputFormatters: [
         WhitelistingTextInputFormatter(RegExp(r'[-+]|\d*|[-+]?\d+'))
       ],
       keyboardType: TextInputType.numberWithOptions(signed: true),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Level',
         filled: true,
+        prefixIcon: InkWell(
+          child: Icon(Icons.skip_previous,
+              color: _iconColor(() => modifier.level > 1)),
+          onTap:
+              _tapCallback(() => modifier.level > 1, _decrementLevel, modifier),
+        ),
+        suffixIcon: InkWell(
+            child: Icon(
+              Icons.skip_next,
+              color: _iconColor(() => modifier.level != modifier.maxLevel),
+            ),
+            onTap: _tapCallback(() => modifier.level != modifier.maxLevel,
+                _incrementLevel, modifier)),
       ),
       controller: controller,
     );
+  }
+
+  GestureTapCallback _tapCallback(
+      Predicate shouldEnable, ModifyLevel modifyLevel, Modifier modifier) {
+    return (shouldEnable.call())
+        ? () => _updateLevel(modifier, modifyLevel, context)
+        : null;
+  }
+
+  int _decrementLevel(int level) => level - 1;
+  int _incrementLevel(int level) => level + 1;
+
+  Color _iconColor(Predicate predicate) {
+    if (predicate.call()) {
+      return null;
+    }
+    return Colors.grey.shade200;
+  }
+
+  void _updateLevel(LeveledModifier modifier, ModifyLevel _modifyLevel,
+      BuildContext context) {
+    Modifier m = cloneLeveledModifier(modifier,
+        level: _modifyLevel.call(modifier.level));
+    TraitModel.update(
+        context, TraitModel.replaceModifier(trait, index: index, modifier: m));
   }
 }
