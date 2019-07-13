@@ -78,7 +78,7 @@ class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
       onChanged: (text) {
         print(text);
         int value = int.tryParse(text) ?? modifier.level;
-        _updateLevel(modifier, (x) => value, context);
+        _updateLevel(modifier, value, context);
       },
       textAlign: TextAlign.right,
       inputFormatters: [
@@ -86,47 +86,35 @@ class _ModifierLevelTextFieldState extends State<ModifierLevelTextField> {
       ],
       keyboardType: TextInputType.numberWithOptions(signed: true),
       decoration: InputDecoration(
-        labelText: 'Level',
+        labelText: modifier.levelPrompt,
         filled: true,
         prefixIcon: InkWell(
-          child: Icon(Icons.skip_previous,
-              color: _iconColor(() => modifier.level > 1)),
-          onTap:
-              _tapCallback(() => modifier.level > 1, _decrementLevel, modifier),
+          child:
+              Icon(Icons.skip_previous, color: _iconColor(modifier.level > 1)),
+          onTap: _tapCallback(modifier.level > 1, modifier.level - 1, modifier),
         ),
         suffixIcon: InkWell(
             child: Icon(
               Icons.skip_next,
-              color: _iconColor(() => modifier.level != modifier.maxLevel),
+              color: _iconColor(modifier.level != modifier.maxLevel),
             ),
-            onTap: _tapCallback(() => modifier.level != modifier.maxLevel,
-                _incrementLevel, modifier)),
+            onTap: _tapCallback(modifier.level != modifier.maxLevel,
+                modifier.level + 1, modifier)),
       ),
       controller: controller,
     );
   }
 
   GestureTapCallback _tapCallback(
-      Predicate shouldEnable, ModifyLevel modifyLevel, Modifier modifier) {
-    return (shouldEnable.call())
-        ? () => _updateLevel(modifier, modifyLevel, context)
-        : null;
+      bool enabled, int newValue, Modifier modifier) {
+    return (enabled) ? () => _updateLevel(modifier, newValue, context) : null;
   }
 
-  int _decrementLevel(int level) => level - 1;
-  int _incrementLevel(int level) => level + 1;
+  Color _iconColor(bool enabled) => (enabled) ? null : Colors.grey.shade200;
 
-  Color _iconColor(Predicate predicate) {
-    if (predicate.call()) {
-      return null;
-    }
-    return Colors.grey.shade200;
-  }
-
-  void _updateLevel(LeveledModifier modifier, ModifyLevel _modifyLevel,
-      BuildContext context) {
-    Modifier m = cloneLeveledModifier(modifier,
-        level: _modifyLevel.call(modifier.level));
+  void _updateLevel(
+      LeveledModifier modifier, int newLevel, BuildContext context) {
+    Modifier m = cloneLeveledModifier(modifier, level: newLevel);
     TraitModel.update(
         context, TraitModel.replaceModifier(trait, index: index, modifier: m));
   }
