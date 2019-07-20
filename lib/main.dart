@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
             return AbilityBuilder();
           });
         }
+        return null;
       },
       title: 'Flutter Demo',
       theme: ThemeData(

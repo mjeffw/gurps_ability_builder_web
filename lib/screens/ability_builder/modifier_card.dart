@@ -75,7 +75,7 @@ class ModifierCard extends StatelessWidget {
         Expanded(
           child: Padding(
             child: Text(
-              '$title${model.canonicalName}',
+              '$title${model.canonicalName}, ${!model.percentage.isNegative ? "+" : ""}${model.percentage}%',
               style: titleStyle,
               maxLines: 2,
             ),
@@ -90,10 +90,6 @@ class ModifierCard extends StatelessWidget {
                 color: Colors.grey,
               ),
               padding: EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 0.0)),
-        ),
-        Text(
-          '${!model.percentage.isNegative ? "+" : ""}${model.percentage}%',
-          style: titleStyle,
         ),
       ],
     );

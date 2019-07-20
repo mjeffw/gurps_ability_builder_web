@@ -63,7 +63,7 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
         return ListTile(title: Text(suggestion), dense: true);
       },
       onSuggestionSelected: (suggestion) {
-        Modifier m = modifiers.fetch(suggestion);
+        Modifier m = Modifiers.instance().fetch(suggestion);
         TraitModel.update(context,
             TraitModel.replaceModifier(trait, index: index, modifier: m));
       },
@@ -80,7 +80,7 @@ class _ModifierNameTextFieldState extends State<ModifierNameTextField> {
   }
 
   List<String> _suggestionsCallback(String pattern) {
-    return modifiers.fetchKeys().where((test) {
+    return Modifiers.instance().fetchKeys().where((test) {
       return test.toLowerCase().startsWith(pattern.toLowerCase());
     }).toList();
   }
